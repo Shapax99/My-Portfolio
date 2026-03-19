@@ -68,15 +68,6 @@ body.loaded {
   opacity: 1;
 }
 
-/* Mejoras en las animaciones existentes */
-.about {
-  transform: translateY(20px);
-}
-
-.project {
-  transform: translateY(20px);
-}
-
 /* Hover effects para navegación */
 .nav-link {
   position: relative;

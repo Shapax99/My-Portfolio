@@ -8,15 +8,11 @@ document.addEventListener('DOMContentLoaded', function() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('animate');
-                // Add staggered animation delay
-                const delay = Array.from(timelineItems).indexOf(entry.target) * 200;
-                setTimeout(() => {
-                    entry.target.style.transitionDelay = '0ms';
-                }, delay);
+                timelineObserver.unobserve(entry.target);
             }
         });
     }, {
-        threshold: 0.3,
+        threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
     });
     

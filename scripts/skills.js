@@ -3,7 +3,7 @@
 // Función para animar las barras de progreso
 function animateSkillBars() {
     const skillBars = document.querySelectorAll('.skill-progress');
-    
+
     skillBars.forEach(bar => {
         const percentage = bar.getAttribute('data-percentage');
         setTimeout(() => {
@@ -12,53 +12,26 @@ function animateSkillBars() {
     });
 }
 
-// Observer para las categorías de habilidades
+// Observer para las categorías de habilidades - solo animar una vez
+let skillBarsAnimated = false;
 const skillsCategories = document.querySelectorAll('.skills-category');
 
 const skillsObserver = new IntersectionObserver(entries => {
-    entries.forEach((entry, index) => {
+    entries.forEach(entry => {
         if (entry.isIntersecting) {
-            // Añadir delay escalonado para efecto más elegante
-            setTimeout(() => {
-                entry.target.classList.add("aparicion");
-                entry.target.classList.add("animate-slide-up");
-                
-                // Animar las barras de progreso cuando la sección sea visible
-                if (index === 0) { // Solo ejecutar una vez
-                    setTimeout(animateSkillBars, 500);
-                }
-            }, index * 200);
-        } else {
-            entry.target.classList.remove("aparicion");
-            entry.target.classList.remove("animate-slide-up");
+            entry.target.classList.add("aparicion");
+
+            // Animar las barras solo la primera vez que cualquier categoría sea visible
+            if (!skillBarsAnimated) {
+                skillBarsAnimated = true;
+                setTimeout(animateSkillBars, 500);
+            }
+
+            skillsObserver.unobserve(entry.target);
         }
     });
 }, {
-    threshold: 0.3
+    threshold: 0.1
 });
 
 skillsCategories.forEach(category => skillsObserver.observe(category));
-
-// Función para resetear animaciones de habilidades
-function resetSkillAnimations() {
-    const skillBars = document.querySelectorAll('.skill-progress');
-    skillBars.forEach(bar => {
-        bar.style.width = '0%';
-    });
-}
-
-// Resetear cuando las secciones salen de vista
-const skillsSection = document.querySelector('.skills-section');
-if (skillsSection) {
-    const resetObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (!entry.isIntersecting) {
-                resetSkillAnimations();
-            }
-        });
-    }, {
-        threshold: 0.1
-    });
-    
-    resetObserver.observe(skillsSection);
-}

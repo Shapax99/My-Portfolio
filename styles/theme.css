@@ -49,20 +49,12 @@ input::placeholder, textarea::placeholder {
 }
 
 footer {
-  background: linear-gradient(to top, var(--bg-primary) 0%, transparent 100%) !important;
-  border-top: 1px solid var(--border-color) !important;
-  color: var(--text-primary) !important;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-primary);
 }
 
 .nav-toggle .bar {
   background-color: var(--text-primary) !important;
-}
-
-/* Responsive para modo claro */
-@media screen and (max-width: 768px) {
-  [data-theme="light"] .nav-menu {
-    background-color: var(--bg-primary) !important;
-  }
 }
 
 /* Animaciones del toggle de tema */
@@ -199,9 +191,10 @@ footer {
 }
 
 .skills-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
+  justify-content: center;
 }
 
 .skills-category {
@@ -214,6 +207,8 @@ footer {
   transition: all 0.3s ease;
   opacity: 0;
   transform: translateY(20px);
+  flex: 1 1 350px;
+  max-width: 500px;
 }
 
 .skills-category.aparicion {
@@ -278,10 +273,6 @@ footer {
   position: relative;
 }
 
-[data-theme="light"] .skill-bar {
-  background: rgba(0, 0, 0, 0.1);
-}
-
 .skill-progress {
   height: 100%;
   background: linear-gradient(90deg, var(--accent-color), #8b5cf6);
@@ -305,15 +296,12 @@ footer {
 
 /* Responsive para habilidades */
 @media screen and (max-width: 768px) {
-  .skills-container {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  
   .skills-category {
+    flex: 1 1 100%;
+    max-width: 100%;
     padding: 1.5rem;
   }
-  
+
   .skills-section h1 {
     font-size: 2rem;
   }
@@ -324,6 +312,29 @@ footer {
   padding: 100px 20px;
   background: var(--bg-primary);
   position: relative;
+}
+
+.timeline-section::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--bg-primary));
+  pointer-events: none;
+}
+
+.timeline-section::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to top, transparent, var(--bg-primary));
+  pointer-events: none;
+  z-index: 1;
 }
 
 .timeline-section .section-title {
@@ -687,6 +698,29 @@ footer {
   padding: 100px 20px;
   background: var(--bg-primary);
   position: relative;
+}
+
+.projects-section::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--bg-primary));
+  pointer-events: none;
+}
+
+.projects-section::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to top, transparent, var(--bg-primary));
+  pointer-events: none;
+  z-index: 1;
 }
 
 .projects-section .section-title {

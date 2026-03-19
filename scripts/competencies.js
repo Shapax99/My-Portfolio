@@ -12,15 +12,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (entry.isIntersecting) {
                 entry.target.classList.add('animate');
                 animateChart(entry.target);
-                // Add staggered animation delay
-                const delay = Array.from(competencyItems).indexOf(entry.target) * 200;
-                setTimeout(() => {
-                    entry.target.style.transitionDelay = '0ms';
-                }, delay);
+                competencyObserver.unobserve(entry.target);
             }
         });
     }, {
-        threshold: 0.3,
+        threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
     });
     

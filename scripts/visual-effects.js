@@ -1,41 +1,49 @@
 // Advanced Visual Effects Script
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize all visual effects
-    initParticleSystem();
-    initCustomCursor();
+    // Detect if the device can handle heavy effects
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent) || window.innerWidth <= 768;
+
+    if (!prefersReducedMotion && !isMobile) {
+        initParticleSystem();
+        initCustomCursor();
+    }
     initScrollEffects();
     initInteractiveAnimations();
 });
 
-// Particle System
+// Particle System (optimized)
 function initParticleSystem() {
     const canvas = document.createElement('canvas');
     canvas.id = 'particle-canvas';
-    canvas.style.position = 'fixed';
-    canvas.style.top = '0';
-    canvas.style.left = '0';
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.style.pointerEvents = 'none';
-    canvas.style.zIndex = '-1';
-    canvas.style.opacity = '0.6';
+    canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:-1;opacity:0.6';
     document.body.appendChild(canvas);
 
     const ctx = canvas.getContext('2d');
     let particles = [];
     let mouse = { x: 0, y: 0 };
+    let animationId = null;
+    let isVisible = true;
 
-    // Resize canvas
+    // Pause when tab is not visible
+    document.addEventListener('visibilitychange', () => {
+        isVisible = !document.hidden;
+        if (isVisible && !animationId) animate();
+    });
+
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     }
-    
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
 
-    // Particle class
+    resizeCanvas();
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(resizeCanvas, 200);
+    });
+
     class Particle {
         constructor() {
             this.x = Math.random() * canvas.width;
@@ -50,22 +58,19 @@ function initParticleSystem() {
             this.x += this.vx;
             this.y += this.vy;
 
-            // Mouse interaction
             const dx = mouse.x - this.x;
             const dy = mouse.y - this.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+            const distSq = dx * dx + dy * dy;
 
-            if (distance < 100) {
+            if (distSq < 10000) { // 100^2
+                const distance = Math.sqrt(distSq);
                 const force = (100 - distance) / 100;
                 this.vx -= (dx / distance) * force * 0.01;
                 this.vy -= (dy / distance) * force * 0.01;
             }
 
-            // Boundary check
             if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
             if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-
-            // Keep particles in bounds
             this.x = Math.max(0, Math.min(canvas.width, this.x));
             this.y = Math.max(0, Math.min(canvas.height, this.y));
         }
@@ -78,44 +83,45 @@ function initParticleSystem() {
         }
     }
 
-    // Create particles
-    for (let i = 0; i < 50; i++) {
+    // Reduced particle count for better performance
+    const particleCount = 30;
+    for (let i = 0; i < particleCount; i++) {
         particles.push(new Particle());
     }
 
-    // Mouse move event
     document.addEventListener('mousemove', (e) => {
         mouse.x = e.clientX;
         mouse.y = e.clientY;
     });
 
-    // Animation loop
     function animate() {
+        if (!isVisible) { animationId = null; return; }
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        particles.forEach(particle => {
-            particle.update();
-            particle.draw();
-        });
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].update();
+            particles[i].draw();
+        }
 
-        // Draw connections
-        particles.forEach((particle, i) => {
-            particles.slice(i + 1).forEach(otherParticle => {
-                const dx = particle.x - otherParticle.x;
-                const dy = particle.y - otherParticle.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
+        // Draw connections - use squared distance to avoid sqrt
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const distSq = dx * dx + dy * dy;
 
-                if (distance < 100) {
+                if (distSq < 10000) { // 100^2
+                    const distance = Math.sqrt(distSq);
                     ctx.beginPath();
-                    ctx.moveTo(particle.x, particle.y);
-                    ctx.lineTo(otherParticle.x, otherParticle.y);
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
                     ctx.strokeStyle = `rgba(96, 165, 250, ${0.1 * (100 - distance) / 100})`;
                     ctx.stroke();
                 }
-            });
-        });
+            }
+        }
 
-        requestAnimationFrame(animate);
+        animationId = requestAnimationFrame(animate);
     }
 
     animate();
@@ -123,17 +129,14 @@ function initParticleSystem() {
 
 // Custom Cursor
 function initCustomCursor() {
-    // Círculo exterior (seguidor suave)
     const cursorFollower = document.createElement('div');
     cursorFollower.classList.add('cursor-follower');
     document.body.appendChild(cursorFollower);
 
-    // Punto central (sigue directo al mouse)
     const cursorCore = document.createElement('div');
     cursorCore.classList.add('cursor-core');
     document.body.appendChild(cursorCore);
 
-    // Efecto de trail/rastro
     const cursorTrail = document.createElement('div');
     cursorTrail.classList.add('cursor-trail');
     document.body.appendChild(cursorTrail);
@@ -141,30 +144,29 @@ function initCustomCursor() {
     let mouseX = 0, mouseY = 0;
     let followerX = 0, followerY = 0;
     let trailX = 0, trailY = 0;
+    let coreX = 0, coreY = 0;
 
-    // Movimiento del mouse - solo actualiza posición objetivo
     document.addEventListener('mousemove', (e) => {
         mouseX = e.clientX;
         mouseY = e.clientY;
-        
-        // El núcleo sigue directamente al mouse (respuesta inmediata)
-        cursorCore.style.left = mouseX + 'px';
-        cursorCore.style.top = mouseY + 'px';
     });
 
-    // Animación suave para el seguidor y el rastro - velocidad constante
+    // All cursor elements update inside rAF for consistent frame timing
     function animateCursor() {
-        // Interpolación suave constante (sin cambios por mousedown)
-        const followerSpeed = 0.12;
-        const trailSpeed = 0.06;
-        
-        // Seguidor con interpolación
+        const coreSpeed = 0.85;
+        const followerSpeed = 0.35;
+        const trailSpeed = 0.18;
+
+        coreX += (mouseX - coreX) * coreSpeed;
+        coreY += (mouseY - coreY) * coreSpeed;
+        cursorCore.style.left = coreX + 'px';
+        cursorCore.style.top = coreY + 'px';
+
         followerX += (mouseX - followerX) * followerSpeed;
         followerY += (mouseY - followerY) * followerSpeed;
         cursorFollower.style.left = followerX + 'px';
         cursorFollower.style.top = followerY + 'px';
 
-        // Trail con interpolación
         trailX += (mouseX - trailX) * trailSpeed;
         trailY += (mouseY - trailY) * trailSpeed;
         cursorTrail.style.left = trailX + 'px';
@@ -205,52 +207,29 @@ function initCustomCursor() {
 
 // Scroll Effects
 function initScrollEffects() {
-    // Parallax effect for background elements
+    // Throttled parallax effect for background elements
+    let scrollTicking = false;
     window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const parallax = document.querySelectorAll('.parallax');
-        
-        parallax.forEach(element => {
-            const speed = element.dataset.speed || 0.5;
-            element.style.transform = `translateY(${scrolled * speed}px)`;
-        });
-    });
-
-    // Smooth reveal animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('reveal');
-            }
-        });
-    }, observerOptions);
-
-    // Add reveal class to elements
-    const revealElements = document.querySelectorAll('section, .project, h1, h2');
-    revealElements.forEach(element => {
-        element.classList.add('reveal-element');
-        revealObserver.observe(element);
+        if (!scrollTicking) {
+            requestAnimationFrame(() => {
+                const scrolled = window.pageYOffset;
+                const parallax = document.querySelectorAll('.parallax');
+                parallax.forEach(element => {
+                    const speed = element.dataset.speed || 0.5;
+                    element.style.transform = `translateY(${scrolled * speed}px)`;
+                });
+                scrollTicking = false;
+            });
+            scrollTicking = true;
+        }
     });
 }
 
 // Interactive Animations
 function initInteractiveAnimations() {
-    // Floating animation for cards
-    const floatingElements = document.querySelectorAll('.project, .competency-item, .skills-category');
-    
-    floatingElements.forEach((element, index) => {
-        element.style.animationDelay = `${index * 0.1}s`;
-        element.classList.add('floating');
-    });
-
     // Ripple effect for buttons
     const buttons = document.querySelectorAll('.btn, button');
-    
+
     buttons.forEach(button => {
         button.addEventListener('click', function(e) {
             const ripple = document.createElement('span');
@@ -258,42 +237,19 @@ function initInteractiveAnimations() {
             const size = Math.max(rect.width, rect.height);
             const x = e.clientX - rect.left - size / 2;
             const y = e.clientY - rect.top - size / 2;
-            
+
             ripple.style.width = ripple.style.height = size + 'px';
             ripple.style.left = x + 'px';
             ripple.style.top = y + 'px';
             ripple.classList.add('ripple-effect');
-            
+
             this.appendChild(ripple);
-            
+
             setTimeout(() => {
                 ripple.remove();
             }, 600);
         });
     });
-
-    // Text typing effect for hero section
-    const heroTitle = document.querySelector('.hero h1');
-    if (heroTitle) {
-        const text = heroTitle.textContent;
-        heroTitle.textContent = '';
-        heroTitle.style.borderRight = '2px solid var(--accent-color)';
-        
-        let i = 0;
-        function typeWriter() {
-            if (i < text.length) {
-                heroTitle.textContent += text.charAt(i);
-                i++;
-                setTimeout(typeWriter, 100);
-            } else {
-                setTimeout(() => {
-                    heroTitle.style.borderRight = 'none';
-                }, 1000);
-            }
-        }
-        
-        setTimeout(typeWriter, 1000);
-    }
 }
 
 // Add CSS for visual effects
@@ -396,28 +352,6 @@ effectsStyle.textContent = `
         transform: translate(-50%, -50%) scale(0.9);
     }
     
-    /* Reveal animations */
-    .reveal-element {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-    
-    .reveal-element.reveal {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    
-    /* Floating animation */
-    .floating {
-        animation: floating 6s ease-in-out infinite;
-    }
-    
-    @keyframes floating {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-10px); }
-    }
-    
     /* Ripple effect */
     .ripple-effect {
         position: absolute;
@@ -427,34 +361,25 @@ effectsStyle.textContent = `
         animation: ripple-animation 0.6s linear;
         pointer-events: none;
     }
-    
+
     @keyframes ripple-animation {
         to {
             transform: scale(4);
             opacity: 0;
         }
     }
-    
+
     /* Disable cursor on mobile */
     @media (max-width: 768px) {
         * {
             cursor: auto !important;
         }
-        
+
         .cursor-core,
         .cursor-follower,
         .cursor-trail {
             display: none;
         }
-    }
-    
-    /* Particle canvas dark mode adjustment */
-    [data-theme="dark"] #particle-canvas {
-        opacity: 0.4;
-    }
-    
-    [data-theme="light"] #particle-canvas {
-        opacity: 0.2;
     }
 `;
 document.head.appendChild(effectsStyle);

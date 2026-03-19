@@ -66,6 +66,7 @@ function initProjectAnimations() {
             if (entry.isIntersecting) {
                 entry.target.style.opacity = '1';
                 entry.target.style.transform = 'translateY(0)';
+                projectObserver.unobserve(entry.target);
             }
         });
     }, {

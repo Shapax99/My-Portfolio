@@ -1,42 +1,6 @@
 // Actualizar año automáticamente
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// SISTEMA DE TEMA OSCURO/CLARO
-const themeToggle = document.getElementById('theme-toggle');
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-// Obtener tema guardado o usar preferencia del sistema
-const currentTheme = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light');
-document.documentElement.setAttribute('data-theme', currentTheme);
-
-// Función para cambiar tema
-function switchTheme() {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
-    // Añadir animación
-    themeToggle.classList.add('theme-toggle-animation');
-    
-    // Cambiar tema
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    
-    // Remover animación después de completarse
-    setTimeout(() => {
-        themeToggle.classList.remove('theme-toggle-animation');
-    }, 500);
-}
-
-// Event listener para el botón de tema
-themeToggle.addEventListener('click', switchTheme);
-
-// Detectar cambios en la preferencia del sistema
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    if (!localStorage.getItem('theme')) {
-        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-    }
-});
-
 // VALIDACIÓN Y MANEJO DEL FORMULARIO MEJORADO
 const form = document.getElementById('contact-form');
 const nameInput = document.getElementById('name');
@@ -148,7 +112,7 @@ form.addEventListener('submit', function(e) {
 
 // Boton de redireccionar
 document.querySelector("#language-toggle").addEventListener("click", () => {
-    window.location.href = "index_EN.html"
+    window.location.href = "index.html"
 });
 
 // NAVEGACIÓN MÓVIL
@@ -166,11 +130,20 @@ navToggle.addEventListener('click', () => {
     navToggle.classList.toggle('active');
 });
 
-// Cerrar menú al hacer click en un enlace
+// Cerrar menú al hacer click en un enlace + smooth scroll
 document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', () => {
+    link.addEventListener('click', (e) => {
         navMenu.classList.remove('active');
         navToggle.classList.remove('active');
+
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
     });
 });
 
