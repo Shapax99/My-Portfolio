@@ -15,7 +15,7 @@ const imageGroups = {
   1: ['img/teso2.jpeg', 'img/teso1.jpeg'],
   2: ['img/biblio2.jpeg', 'img/biblio1.jpeg'],
   3: ['img/cyber2.jpeg', 'img/cyber1.jpeg'],
-  4: ['img/fondo2.jpg']
+  4: ['img/prefe1.jpeg', 'img/prefe2.jpeg', 'img/prefe3.jpeg']
 };
 
 
@@ -81,13 +81,20 @@ const projectDetails = {
     links: {}
   },
   4: {
-    title: 'Historial Academica - Sistema Web',
-    desc: 'Detalles por definir.',
-    tech: ['Por definir'],
+    title: 'Historial Académico - Sistema Web',
+    desc: 'Sistema web para la gestión del historial académico de alumnos, actualmente en producción y en mejora continua. (Las imágenes mostradas utilizan datos de ejemplo, no información real de alumnos ni de la institución)',
+    tech: ['React', 'Node.js', 'PostgreSQL', 'Express', 'JWT', 'Axios', 'CORS', 'pdfkit', 'xlsx', 'bcrypt', 'jsonwebtoken', 'helmet'],
     status: 'development',
     statusText: 'En Desarrollo',
     date: '',
-    highlights: [],
+    highlights: [
+      'Gestión de datos del alumno y consulta del historial del alumno',
+      'Módulos de antecedentes, justificantes, salidas con permiso y suspensiones',
+      'Diseño de ticket propio integrado al flujo del sistema',
+      'Funciones de seguridad, administración de usuarios y manejo de base de datos',
+      'Sistema de registros para seguimiento de operaciones y actividad capturada',
+      'Optimizado para dispositivos móviles y equipos con procesadores antiguos',
+    ],
     links: {}
   }
 };
@@ -133,21 +140,17 @@ function abrirModal(index) {
   currentImages = imageGroups[index];
   currentIndex = 0;
 
-  // Title, description, date
   modalTitulo.textContent = data.title;
   modalDesc.textContent = data.desc;
   modalDate.textContent = data.date || '';
 
-  // Status badge
   modalStatus.textContent = data.statusText;
   modalStatus.className = 'modal-status status-' + data.status;
 
-  // Tech tags
   modalTech.innerHTML = data.tech.map(function(t) {
     return '<span class="modal-tech-tag">' + t + '</span>';
   }).join('');
 
-  // Highlights
   if (data.highlights && data.highlights.length > 0) {
     modalHighlightsSection.style.display = '';
     modalHighlights.innerHTML = data.highlights.map(function(h) {
@@ -157,7 +160,6 @@ function abrirModal(index) {
     modalHighlightsSection.style.display = 'none';
   }
 
-  // Action links
   var linksHTML = '';
   if (data.links && data.links.live) {
     linksHTML += '<a href="' + data.links.live + '" target="_blank" rel="noopener noreferrer" class="modal-link modal-link-primary">' +
@@ -172,18 +174,15 @@ function abrirModal(index) {
   modalActions.innerHTML = linksHTML;
   modalActions.style.display = linksHTML ? '' : 'none';
 
-  // Load image
   if (currentImages[currentIndex]) {
     lazyLoadImage(currentImages[currentIndex]).catch(function() {
       modalImg.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMTIxMjJiIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjNDQ0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+SW1hZ2VuIG5vIGRpc3BvbmlibGU8L3RleHQ+PC9zdmc+';
     });
   }
 
-  // Show/hide carousel controls
   var controls = modal.querySelector('.carousel-controls');
   controls.style.display = currentImages.length > 1 ? 'flex' : 'none';
 
-  // Animate open
   modal.classList.remove('hidden');
   requestAnimationFrame(function() {
     modal.classList.add('active');
@@ -203,7 +202,6 @@ document.querySelectorAll('.btn.ver-proyecto').forEach(function(btn, index) {
   btn.addEventListener('click', function() { abrirModal(index); });
 });
 
-// Carousel navigation
 document.getElementById('prev-img').addEventListener('click', function() {
   currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
   if (currentImages[currentIndex]) { lazyLoadImage(currentImages[currentIndex]); }
@@ -214,17 +212,15 @@ document.getElementById('next-img').addEventListener('click', function() {
   if (currentImages[currentIndex]) { lazyLoadImage(currentImages[currentIndex]); }
 });
 
-// Close on overlay click
 modal.querySelector('.modal-overlay').addEventListener('click', cerrarModal);
 
-// Close on ESC
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
     cerrarModal();
   }
 });
 
-// ===== VISOR DE IMAGEN CON ZOOM Y PAN =====
+// VISOR DE IMAGEN
 (function() {
   var viewer = document.getElementById('image-viewer');
   var viewerImg = document.getElementById('image-viewer-img');
@@ -257,22 +253,18 @@ document.addEventListener('keydown', function(e) {
     viewer.classList.remove('active');
   }
 
-  // Click en imagen del modal abre el visor
   modalImg.addEventListener('click', function() {
     if (modalImg.src && !modalImg.src.startsWith('data:')) {
       openViewer(modalImg.src);
     }
   });
 
-  // Cerrar visor
   viewerClose.addEventListener('click', closeViewer);
 
-  // Click fuera de la imagen cierra
   viewer.addEventListener('click', function(e) {
     if (e.target === viewer) closeViewer();
   });
 
-  // ESC cierra el visor
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && viewer.classList.contains('active')) {
       closeViewer();
@@ -280,7 +272,6 @@ document.addEventListener('keydown', function(e) {
     }
   });
 
-  // Zoom con rueda del ratón
   viewer.addEventListener('wheel', function(e) {
     e.preventDefault();
     var delta = e.deltaY > 0 ? -0.15 : 0.15;
@@ -289,7 +280,6 @@ document.addEventListener('keydown', function(e) {
     updateTransform();
   }, { passive: false });
 
-  // Pan con arrastre
   viewer.addEventListener('mousedown', function(e) {
     if (e.target === viewerClose) return;
     if (scale > 1) {
@@ -313,7 +303,6 @@ document.addEventListener('keydown', function(e) {
     viewer.classList.remove('dragging');
   });
 
-  // Doble click para resetear zoom
   viewerImg.addEventListener('dblclick', function() {
     if (scale !== 1) {
       scale = 1; panX = 0; panY = 0;

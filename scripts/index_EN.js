@@ -1,14 +1,13 @@
-// Actualizar año automáticamente
+// Actualizar año
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// VALIDACIÓN Y MANEJO DEL FORMULARIO MEJORADO
+// VALIDACIÓN DEL FORMULARIO
 const form = document.getElementById('contact-form');
 const nameInput = document.getElementById('name');
 const emailInput = document.getElementById('email');
 const messageInput = document.getElementById('message');
 const submitBtn = form.querySelector('.submit-btn');
 
-// Funciones de validación
 function validateName(name) {
     return name.trim().length >= 2;
 }
@@ -22,7 +21,6 @@ function validateMessage(message) {
     return message.trim().length >= 10;
 }
 
-// Función para mostrar errores
 function showError(input, message) {
     const formGroup = input.parentElement;
     formGroup.classList.remove('success');
@@ -31,14 +29,12 @@ function showError(input, message) {
     errorElement.textContent = message;
 }
 
-// Función para mostrar éxito
 function showSuccess(input) {
     const formGroup = input.parentElement;
     formGroup.classList.remove('error');
     formGroup.classList.add('success');
 }
 
-// Validación en tiempo real
 nameInput.addEventListener('input', () => {
     if (validateName(nameInput.value)) {
         showSuccess(nameInput);
@@ -63,7 +59,6 @@ messageInput.addEventListener('input', () => {
     }
 });
 
-// Manejo del envío del formulario
 form.addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -92,7 +87,6 @@ form.addEventListener('submit', function(e) {
     }
     
     if (isValid) {
-        // Simular envío
         submitBtn.classList.add('loading');
         submitBtn.disabled = true;
         
@@ -102,7 +96,6 @@ form.addEventListener('submit', function(e) {
             alert('Message sent successfully! Thank you for contacting me.');
             form.reset();
             
-            // Limpiar estados de validación
             document.querySelectorAll('.form-group').forEach(group => {
                 group.classList.remove('success', 'error');
             });
@@ -110,17 +103,15 @@ form.addEventListener('submit', function(e) {
     }
 });
 
-// Boton de redireccionar
 document.querySelector("#language-toggle").addEventListener("click", () => {
     window.location.href = "index_ES.html"
 });
 
-// MOBILE NAVIGATION
+// NAVEGACIÓN
 const navToggle = document.getElementById('nav-toggle');
 const navMenu = document.getElementById('nav-menu');
 const navigation = document.getElementById('navigation');
 
-// Create scroll progress bar
 const scrollProgress = document.createElement('div');
 scrollProgress.classList.add('scroll-progress');
 navigation.appendChild(scrollProgress);
@@ -130,7 +121,6 @@ navToggle.addEventListener('click', () => {
     navToggle.classList.toggle('active');
 });
 
-// Close menu when clicking on a link + smooth scroll
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', (e) => {
         navMenu.classList.remove('active');
@@ -147,27 +137,34 @@ document.querySelectorAll('.nav-link').forEach(link => {
     });
 });
 
-// Improved scroll effect on navigation
+// Scroll en navegación
 window.addEventListener('scroll', () => {
-    // Add scrolled class
     if (window.scrollY > 50) {
         navigation.classList.add('scrolled');
     } else {
         navigation.classList.remove('scrolled');
     }
 
-    // Update progress bar
     const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const scrolled = (window.scrollY / windowHeight) * 100;
     scrollProgress.style.width = scrolled + '%';
 });
 
-// Active section indicator
+// Sección activa
 const sections = document.querySelectorAll('section, header');
 const navLinks = document.querySelectorAll('.nav-link');
+const sideNav = document.getElementById('side-nav');
+const sideNavItems = document.querySelectorAll('.side-nav-item');
 
 window.addEventListener('scroll', () => {
     let current = '';
+    const heroBottom = document.getElementById('hero').offsetTop + document.getElementById('hero').offsetHeight;
+
+    if (window.scrollY > heroBottom - 200) {
+        sideNav.classList.add('visible');
+    } else {
+        sideNav.classList.remove('visible');
+    }
     
     sections.forEach(section => {
         const sectionTop = section.offsetTop;
@@ -182,6 +179,23 @@ window.addEventListener('scroll', () => {
         link.classList.remove('active');
         if (link.getAttribute('href') === `#${current}`) {
             link.classList.add('active');
+        }
+    });
+
+    sideNavItems.forEach(item => {
+        item.classList.remove('active');
+        if (item.getAttribute('href') === `#${current}`) {
+            item.classList.add('active');
+        }
+    });
+});
+
+sideNavItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(item.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     });
 });

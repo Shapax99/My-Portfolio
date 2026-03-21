@@ -1,7 +1,6 @@
-// Timeline Animation Script
+// Timeline
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Timeline animation with Intersection Observer
     const timelineItems = document.querySelectorAll('.timeline-item');
 
     const timelineObserver = new IntersectionObserver((entries) => {
@@ -20,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
         timelineObserver.observe(item);
     });
 
-    // Timeline content hover — highlight related marker
     const timelineContents = document.querySelectorAll('.timeline-content');
 
     timelineContents.forEach(content => {

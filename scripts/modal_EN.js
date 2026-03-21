@@ -15,7 +15,7 @@ const imageGroups = {
   1: ['img/teso2.jpeg', 'img/teso1.jpeg'],
   2: ['img/biblio2.jpeg', 'img/biblio1.jpeg'],
   3: ['img/cyber2.jpeg', 'img/cyber1.jpeg'],
-  4: ['img/fondo2.jpg']
+  4: ['img/prefe1.jpeg', 'img/prefe2.jpeg', 'img/prefe3.jpeg']
 };
 
 const projectDetails = {
@@ -81,12 +81,19 @@ const projectDetails = {
   },
   4: {
     title: 'Academic Record - Web System',
-    desc: 'Details to be defined.',
-    tech: ['To be defined'],
+    desc: 'Web system for managing students academic records, currently in production and under continuous improvement. (The images shown use sample data, not real student or institution information)',
+    tech: ['React', 'Node.js', 'PostgreSQL', 'Express', 'JWT', 'Axios', 'CORS', 'pdfkit', 'xlsx', 'bcrypt', 'jsonwebtoken', 'helmet'],
     status: 'development',
     statusText: 'In Development',
     date: '',
-    highlights: [],
+    highlights: [
+      'Student data management and academic record lookup',
+      'Modules for incident records, excuses, authorized exits, and suspensions',
+      'Custom ticket design integrated into the system workflow',
+      'Security features, user administration, and database management',
+      'Logging system for operation tracking and captured activity',
+      'Optimized for mobile devices and computers with older processors'
+    ],
     links: {}
   }
 };
@@ -132,21 +139,17 @@ function abrirModal(index) {
   currentImages = imageGroups[index];
   currentIndex = 0;
 
-  // Title, description, date
   modalTitulo.textContent = data.title;
   modalDesc.textContent = data.desc;
   modalDate.textContent = data.date || '';
 
-  // Status badge
   modalStatus.textContent = data.statusText;
   modalStatus.className = 'modal-status status-' + data.status;
 
-  // Tech tags
   modalTech.innerHTML = data.tech.map(function(t) {
     return '<span class="modal-tech-tag">' + t + '</span>';
   }).join('');
 
-  // Highlights
   if (data.highlights && data.highlights.length > 0) {
     modalHighlightsSection.style.display = '';
     modalHighlights.innerHTML = data.highlights.map(function(h) {
@@ -156,7 +159,6 @@ function abrirModal(index) {
     modalHighlightsSection.style.display = 'none';
   }
 
-  // Action links
   var linksHTML = '';
   if (data.links && data.links.live) {
     linksHTML += '<a href="' + data.links.live + '" target="_blank" rel="noopener noreferrer" class="modal-link modal-link-primary">' +
@@ -171,18 +173,15 @@ function abrirModal(index) {
   modalActions.innerHTML = linksHTML;
   modalActions.style.display = linksHTML ? '' : 'none';
 
-  // Load image
   if (currentImages[currentIndex]) {
     lazyLoadImage(currentImages[currentIndex]).catch(function() {
       modalImg.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMTIxMjJiIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjNDQ0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+SW1hZ2Ugbm90IGF2YWlsYWJsZTwvdGV4dD48L3N2Zz4=';
     });
   }
 
-  // Show/hide carousel controls
   var controls = modal.querySelector('.carousel-controls');
   controls.style.display = currentImages.length > 1 ? 'flex' : 'none';
 
-  // Animate open
   modal.classList.remove('hidden');
   requestAnimationFrame(function() {
     modal.classList.add('active');
@@ -202,7 +201,6 @@ document.querySelectorAll('.btn.ver-proyecto').forEach(function(btn, index) {
   btn.addEventListener('click', function() { abrirModal(index); });
 });
 
-// Carousel navigation
 document.getElementById('prev-img').addEventListener('click', function() {
   currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
   if (currentImages[currentIndex]) { lazyLoadImage(currentImages[currentIndex]); }
@@ -213,17 +211,15 @@ document.getElementById('next-img').addEventListener('click', function() {
   if (currentImages[currentIndex]) { lazyLoadImage(currentImages[currentIndex]); }
 });
 
-// Close on overlay click
 modal.querySelector('.modal-overlay').addEventListener('click', cerrarModal);
 
-// Close on ESC
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
     cerrarModal();
   }
 });
 
-// ===== FULLSCREEN IMAGE VIEWER WITH ZOOM AND PAN =====
+// VISOR DE IMAGEN
 (function() {
   var viewer = document.getElementById('image-viewer');
   var viewerImg = document.getElementById('image-viewer-img');
@@ -256,22 +252,18 @@ document.addEventListener('keydown', function(e) {
     viewer.classList.remove('active');
   }
 
-  // Click on modal image opens the viewer
   modalImg.addEventListener('click', function() {
     if (modalImg.src && !modalImg.src.startsWith('data:')) {
       openViewer(modalImg.src);
     }
   });
 
-  // Close viewer
   viewerClose.addEventListener('click', closeViewer);
 
-  // Click outside image closes
   viewer.addEventListener('click', function(e) {
     if (e.target === viewer) closeViewer();
   });
 
-  // ESC closes the viewer
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && viewer.classList.contains('active')) {
       closeViewer();
@@ -279,7 +271,6 @@ document.addEventListener('keydown', function(e) {
     }
   });
 
-  // Zoom with mouse wheel
   viewer.addEventListener('wheel', function(e) {
     e.preventDefault();
     var delta = e.deltaY > 0 ? -0.15 : 0.15;
@@ -288,7 +279,6 @@ document.addEventListener('keydown', function(e) {
     updateTransform();
   }, { passive: false });
 
-  // Pan with drag
   viewer.addEventListener('mousedown', function(e) {
     if (e.target === viewerClose) return;
     if (scale > 1) {
@@ -312,7 +302,6 @@ document.addEventListener('keydown', function(e) {
     viewer.classList.remove('dragging');
   });
 
-  // Double click to reset/toggle zoom
   viewerImg.addEventListener('dblclick', function() {
     if (scale !== 1) {
       scale = 1; panX = 0; panY = 0;

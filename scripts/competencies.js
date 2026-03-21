@@ -1,10 +1,8 @@
-// Competency Charts Animation Script
+// Competencias
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Add SVG gradients dynamically
     addSVGGradients();
     
-    // Competency charts animation with Intersection Observer
     const competencyItems = document.querySelectorAll('.competency-item');
     
     const competencyObserver = new IntersectionObserver((entries) => {
@@ -24,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function() {
         competencyObserver.observe(item);
     });
 
-    // Chart hover effects
     competencyItems.forEach(item => {
         const chartProgress = item.querySelector('.chart-progress');
         const percentage = item.querySelector('.chart-percentage');
@@ -44,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function addSVGGradients() {
-    // Create SVG with gradients and append to body
     const svgNS = "http://www.w3.org/2000/svg";
     const svg = document.createElementNS(svgNS, "svg");
     svg.setAttribute("width", "0");
@@ -53,7 +49,6 @@ function addSVGGradients() {
     
     const defs = document.createElementNS(svgNS, "defs");
     
-    // Main gradient
     const gradient = document.createElementNS(svgNS, "linearGradient");
     gradient.setAttribute("id", "gradient");
     gradient.setAttribute("x1", "0%");
@@ -82,12 +77,10 @@ function animateChart(competencyItem) {
     const circumference = 2 * Math.PI * 60; // radius = 60
     const offset = circumference - (percentage / 100) * circumference;
     
-    // Animate the circular progress
     setTimeout(() => {
         chartProgress.style.strokeDashoffset = offset;
     }, 300);
     
-    // Animate the percentage number
     const percentageElement = competencyItem.querySelector('.chart-percentage');
     animateNumber(percentageElement, 0, percentage, 2000);
 }
@@ -99,7 +92,6 @@ function animateNumber(element, start, end, duration) {
         const elapsedTime = currentTime - startTime;
         const progress = Math.min(elapsedTime / duration, 1);
         
-        // Easing function (ease-out)
         const easedProgress = 1 - Math.pow(1 - progress, 3);
         const currentNumber = Math.round(start + (end - start) * easedProgress);
         
@@ -113,7 +105,6 @@ function animateNumber(element, start, end, duration) {
     requestAnimationFrame(updateNumber);
 }
 
-// Add pulse animation for charts
 const style = document.createElement('style');
 style.textContent = `
     .competency-item:hover .chart-progress {

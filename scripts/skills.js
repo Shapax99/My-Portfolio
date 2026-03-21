@@ -1,6 +1,5 @@
-// ANIMACIONES DE HABILIDADES TÉCNICAS
+// Habilidades técnicas
 
-// Función para animar las barras de progreso
 function animateSkillBars() {
     const skillBars = document.querySelectorAll('.skill-progress');
 
@@ -12,7 +11,7 @@ function animateSkillBars() {
     });
 }
 
-// Observer para las categorías de habilidades - solo animar una vez
+// Observer - animar solo una vez
 let skillBarsAnimated = false;
 const skillsCategories = document.querySelectorAll('.skills-category');
 

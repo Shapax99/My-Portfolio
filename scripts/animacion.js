@@ -1,4 +1,4 @@
-// Forzar scroll al inicio al recargar la página
+// Scroll al inicio al recargar
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }
@@ -7,7 +7,7 @@ window.scrollTo(0, 0);
 document.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add('loaded');
 
-  // Animación de entrada para elementos del hero
+  // Animación hero
   setTimeout(() => {
     const elementsToAnimate = document.querySelectorAll('.hero h1, .hero p, .btn');
     elementsToAnimate.forEach((el, index) => {
@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// Contacto animación mejorada
 const contactBtn = document.querySelector('.btn[href="#contacto"]');
 if (contactBtn) {
   contactBtn.addEventListener('click', (e) => {
@@ -29,7 +28,7 @@ if (contactBtn) {
 }
 
 
-// Animacion para vista de ".about"
+// Observer para ".about"
 const aboutElement = document.querySelector(".about");
 
 if (aboutElement) {
@@ -47,16 +46,51 @@ if (aboutElement) {
   aboutObserver.observe(aboutElement);
 }
 
-// Efecto parallax suave para el hero (throttled)
+// Parallax hero (throttled)
 let heroScrollTicking = false;
 window.addEventListener('scroll', () => {
   if (!heroScrollTicking) {
     requestAnimationFrame(() => {
       const scrolled = window.pageYOffset;
-      const rate = scrolled * -0.5;
       const hero = document.querySelector('.hero');
+      const heroH1 = document.querySelector('.hero h1');
+      const heroP = document.querySelector('.hero p');
+      const heroBtn = document.querySelector('.hero .btn');
+      const scrollIndicator = document.getElementById('scroll-indicator');
+      const viewportHeight = window.innerHeight;
+
       if (hero) {
-        hero.style.transform = `translateY(${rate}px)`;
+        // Parallax background shift
+        hero.style.transform = `translateY(${scrolled * -0.3}px)`;
+
+        // Progress 0→1 through the hero
+        const progress = Math.min(scrolled / (viewportHeight * 0.4), 1);
+
+        // Each layer fades and rises at a different rate
+        if (heroH1) {
+          const p = Math.min(progress * 2.4, 1);
+          heroH1.style.opacity = 1 - p;
+          heroH1.style.transform = `translateY(${-scrolled * 0.45}px)`;
+        }
+        if (heroP) {
+          const p = Math.min(progress * 2.0, 1);
+          heroP.style.opacity = 1 - p;
+          heroP.style.transform = `translateY(${-scrolled * 0.32}px)`;
+        }
+        if (heroBtn) {
+          const p = Math.min(progress * 1.6, 1);
+          heroBtn.style.opacity = 1 - p;
+          heroBtn.style.transform = `translateY(${-scrolled * 0.2}px)`;
+        }
+
+        // Hide scroll indicator quickly
+        if (scrollIndicator) {
+          if (scrolled > 50) {
+            scrollIndicator.classList.add('hidden');
+          } else {
+            scrollIndicator.classList.remove('hidden');
+          }
+        }
       }
       heroScrollTicking = false;
     });
@@ -64,7 +98,6 @@ window.addEventListener('scroll', () => {
   }
 });
 
-// Añadir efecto hover mejorado a los botones
 document.querySelectorAll('.btn').forEach(btn => {
   btn.addEventListener('mouseenter', () => {
     btn.style.transform = 'translateY(-3px) scale(1.02)';

@@ -39,7 +39,7 @@
 }
 
 
-/* Animaciones básicas */
+/* Animaciones */
 .animate-fade {
   animation: fadeIn 0.4s ease-in-out;
 }
@@ -53,13 +53,12 @@
 }
 
 
-/* Botón de contactarme */
 .btn:active {
   animation: bounce 0.3s ease;
 }
 
 
-/* Fade-in de toda la página al cargar */
+/* Fade-in al cargar */
 body {
   opacity: 0;
   transition: opacity 1s ease-in-out;
@@ -68,7 +67,6 @@ body.loaded {
   opacity: 1;
 }
 
-/* Hover effects para navegación */
 .nav-link {
   position: relative;
   transition: all 0.3s ease;
@@ -78,7 +76,6 @@ body.loaded {
   transform: translateY(-2px);
 }
 
-/* Micro-interacciones para elementos */
 .language-btn {
   transition: all 0.3s ease;
 }
@@ -91,7 +88,6 @@ body.loaded {
   transform: scale(0.95);
 }
 
-/* Efecto de carga para imágenes */
 .image-loading {
   position: relative;
   overflow: hidden;

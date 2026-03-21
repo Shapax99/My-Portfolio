@@ -1,7 +1,6 @@
-// Advanced Visual Effects Script
+// Efectos visuales
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Detect if the device can handle heavy effects
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent) || window.innerWidth <= 768;
 
@@ -13,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initInteractiveAnimations();
 });
 
-// Particle System (optimized)
+// Partículas
 function initParticleSystem() {
     const canvas = document.createElement('canvas');
     canvas.id = 'particle-canvas';
@@ -83,7 +82,6 @@ function initParticleSystem() {
         }
     }
 
-    // Reduced particle count for better performance
     const particleCount = 30;
     for (let i = 0; i < particleCount; i++) {
         particles.push(new Particle());
@@ -103,7 +101,6 @@ function initParticleSystem() {
             particles[i].draw();
         }
 
-        // Draw connections - use squared distance to avoid sqrt
         for (let i = 0; i < particles.length; i++) {
             for (let j = i + 1; j < particles.length; j++) {
                 const dx = particles[i].x - particles[j].x;
@@ -127,7 +124,7 @@ function initParticleSystem() {
     animate();
 }
 
-// Custom Cursor
+// Cursor personalizado
 function initCustomCursor() {
     const cursorFollower = document.createElement('div');
     cursorFollower.classList.add('cursor-follower');
@@ -151,7 +148,6 @@ function initCustomCursor() {
         mouseY = e.clientY;
     });
 
-    // All cursor elements update inside rAF for consistent frame timing
     function animateCursor() {
         const coreSpeed = 0.85;
         const followerSpeed = 0.35;
@@ -176,7 +172,6 @@ function initCustomCursor() {
     }
     animateCursor();
 
-    // Cursor interactions con elementos interactivos
     const interactiveElements = document.querySelectorAll('a, button, .project, .skill-item, .timeline-item, .goal-card, .project-card');
     
     interactiveElements.forEach(element => {
@@ -193,7 +188,6 @@ function initCustomCursor() {
         });
     });
 
-    // Efecto de clic simplificado (solo visual, sin afectar movimiento)
     document.addEventListener('mousedown', () => {
         cursorCore.classList.add('cursor-click');
         cursorFollower.classList.add('cursor-click');
@@ -205,9 +199,8 @@ function initCustomCursor() {
     });
 }
 
-// Scroll Effects
+// Scroll
 function initScrollEffects() {
-    // Throttled parallax effect for background elements
     let scrollTicking = false;
     window.addEventListener('scroll', () => {
         if (!scrollTicking) {
@@ -225,9 +218,8 @@ function initScrollEffects() {
     });
 }
 
-// Interactive Animations
+// Animaciones interactivas
 function initInteractiveAnimations() {
-    // Ripple effect for buttons
     const buttons = document.querySelectorAll('.btn, button');
 
     buttons.forEach(button => {
@@ -252,7 +244,7 @@ function initInteractiveAnimations() {
     });
 }
 
-// Add CSS for visual effects
+// CSS para efectos
 const effectsStyle = document.createElement('style');
 effectsStyle.textContent = `
     /* Custom Cursor - Mejorado */

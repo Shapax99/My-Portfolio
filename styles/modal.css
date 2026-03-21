@@ -1,4 +1,4 @@
-/* MODAL DE PROYECTO */
+/* MODAL */
 .modal {
   position: fixed;
   top: 0;
@@ -55,7 +55,6 @@
   transform: scale(1) translateY(0);
 }
 
-/* Scrollbar del modal */
 .modal-content::-webkit-scrollbar {
   width: 6px;
 }
@@ -73,7 +72,6 @@
   background: rgba(96, 165, 250, 0.5);
 }
 
-/* Botón cerrar */
 .close-btn {
   position: sticky;
   top: 16px;
@@ -102,9 +100,8 @@
   transform: rotate(90deg);
 }
 
-/* Header del modal */
 .modal-header {
-  padding: 32px 35px 0;
+  padding: 25px 35px 0;
 }
 
 .modal-header h2 {
@@ -197,7 +194,7 @@
   cursor: zoom-in;
 }
 
-/* ===== VISOR DE IMAGEN A PANTALLA COMPLETA ===== */
+/* VISOR DE IMAGEN */
 .image-viewer {
   position: fixed;
   top: 0;
@@ -314,7 +311,6 @@
   transform: scale(1.1);
 }
 
-/* Contador de imágenes */
 .carousel-counter {
   position: absolute;
   bottom: 12px;
@@ -330,7 +326,6 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Lado derecho: información */
 .modal-info {
   flex: 1;
   min-width: 0;
@@ -339,7 +334,6 @@
   gap: 22px;
 }
 
-/* Secciones de info */
 .modal-section {
   display: flex;
   flex-direction: column;
@@ -361,7 +355,6 @@
   margin: 0;
 }
 
-/* Highlights / detalles destacados */
 .modal-highlights {
   list-style: none;
   padding: 0;
@@ -390,7 +383,6 @@
   margin-top: 7px;
 }
 
-/* Tags de tecnologías */
 .modal-tech {
   display: flex;
   flex-wrap: wrap;

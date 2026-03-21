@@ -61,6 +61,16 @@
     <h1>Hi! I'm Alexis Chapa</h1>
     <p>Technical Virtual Assistant | Junior Web Developer | Support</p>
     <a href="#contacto" class="btn">Contact me</a>
+    <div class="scroll-indicator" id="scroll-indicator">
+      <div class="scroll-indicator-mouse">
+        <div class="scroll-indicator-wheel"></div>
+      </div>
+      <div class="scroll-indicator-arrows">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
   </header>
 
   <section id="about" class="about">
@@ -587,13 +597,16 @@
 
         <div class="project-card" data-category="fullstack" data-aos="fade-up" data-aos-delay="400">
           <div class="project-image">
-            <img src="img/fondo2.jpg" alt="Academic Record" />
+            <img src="img/prefe1.jpeg" alt="Academic Record" />
           </div>
           <div class="project-content">
             <h3>Academic Record - Web System</h3>
-            <p>My biggest project. A comprehensive web system for academic record management with multiple modules and advanced features.</p>
+            <p>Institutional web system for managing student academic records, currently in production and under continuous improvement.</p>
             <div class="project-tech">
-              <span class="tech-tag">To be defined</span>
+              <span class="tech-tag">React</span>
+              <span class="tech-tag">Node.js</span>
+              <span class="tech-tag">PostgreSQL</span>
+              <span class="tech-tag">Express</span>
             </div>
             <div class="project-stats">
               <span class="stat">
@@ -735,6 +748,30 @@
   <img id="image-viewer-img" class="image-viewer-img" src="" alt="Enlarged view" />
   <span class="image-viewer-hint">Scroll to zoom · Drag to pan</span>
 </div>
+
+<!-- Side navigation panel -->
+<nav class="side-nav" id="side-nav">
+  <a class="side-nav-item" href="#about">
+    <span class="side-nav-label">About</span>
+    <span class="side-nav-dot"></span>
+  </a>
+  <a class="side-nav-item" href="#skills">
+    <span class="side-nav-label">Skills</span>
+    <span class="side-nav-dot"></span>
+  </a>
+  <a class="side-nav-item" href="#experience">
+    <span class="side-nav-label">Experience</span>
+    <span class="side-nav-dot"></span>
+  </a>
+  <a class="side-nav-item" href="#projects">
+    <span class="side-nav-label">Projects</span>
+    <span class="side-nav-dot"></span>
+  </a>
+  <a class="side-nav-item" href="#contacto">
+    <span class="side-nav-label">Contact</span>
+    <span class="side-nav-dot"></span>
+  </a>
+</nav>
 
 <button id="language-toggle" class="language-btn" title="Change language to Spanish" aria-label="Switch to Spanish language">
   <img id="lang-icon" src="img/ES.png" alt="Spanish flag icon" />

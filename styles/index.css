@@ -28,7 +28,7 @@
       --card-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
     }
 
-    /* BOTÓN DE TEMA MEJORADO */
+    /* BOTÓN DE TEMA */
     .theme-toggle {
       background: rgba(255, 255, 255, 0.05);
       border: 2px solid rgba(255, 255, 255, 0.1);
@@ -63,7 +63,7 @@
       transform: rotate(180deg);
     }
 
-    /* NAVEGACIÓN MEJORADA */
+    /* NAVEGACIÓN */
     .navigation {
       position: fixed;
       top: 0;
@@ -77,7 +77,6 @@
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     }
 
-    /* Efecto al hacer scroll */
     .navigation.scrolled {
       background: rgba(10, 10, 25, 0.95);
       backdrop-filter: blur(25px) saturate(200%);
@@ -85,7 +84,6 @@
       border-bottom: 1px solid rgba(255, 107, 107, 0.2);
     }
 
-    /* Barra de progreso de scroll */
     .scroll-progress {
       position: absolute;
       bottom: 0;
@@ -114,7 +112,6 @@
       position: relative;
     }
 
-    /* Logo mejorado */
     .nav-brand {
       position: relative;
       z-index: 1001;
@@ -159,7 +156,6 @@
       list-style: none;
     }
 
-    /* Links modernos con efecto pill */
     .nav-link {
       color: var(--text-primary);
       text-decoration: none;
@@ -180,7 +176,6 @@
       box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
     }
 
-    /* Indicador de sección activa */
     .nav-link.active {
       background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(254, 202, 87, 0.2));
       color: #fff;
@@ -220,7 +215,7 @@
       transition: 0.3s;
     }
 
-    /* Responsive Navigation Mejorado */
+    /* Responsive Navigation */
     @media screen and (max-width: 768px) {
       .nav-container {
         padding: 0 20px;
@@ -321,7 +316,8 @@
       justify-content: center;
       align-items: center;
       opacity: 0.9;
-      padding-top: 60px;
+      padding-top: 0px;
+      padding-bottom: 80px;
       position: relative;
       overflow: hidden;
     }
@@ -336,6 +332,103 @@
       background: radial-gradient(circle at 30% 70%, rgba(96, 165, 250, 0.2) 0%, transparent 50%),
                   radial-gradient(circle at 70% 30%, rgba(139, 92, 246, 0.2) 0%, transparent 50%);
       pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: linear-gradient(to bottom, transparent 0%, rgba(15, 15, 35, 0.6) 60%, rgba(15, 15, 35, 1) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .hero h1,
+    .hero p,
+    .hero .btn {
+      transition: opacity 0.05s linear, transform 0.05s linear;
+      will-change: transform, opacity;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    .scroll-indicator.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .scroll-indicator-mouse {
+      width: 26px;
+      height: 42px;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      border-radius: 13px;
+      position: relative;
+    }
+
+    .scroll-indicator-wheel {
+      width: 4px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 2px;
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: scrollWheel 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollWheel {
+      0%   { opacity: 1; transform: translateX(-50%) translateY(0); }
+      50%  { opacity: 0.3; transform: translateX(-50%) translateY(14px); }
+      100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    .scroll-indicator-arrows {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .scroll-indicator-arrows span {
+      display: block;
+      width: 12px;
+      height: 12px;
+      border-right: 2px solid rgba(255, 255, 255, 0.4);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+      transform: rotate(45deg);
+      animation: scrollArrows 2s ease-in-out infinite;
+    }
+
+    .scroll-indicator-arrows span:nth-child(2) {
+      animation-delay: 0.15s;
+      opacity: 0.6;
+    }
+
+    .scroll-indicator-arrows span:nth-child(3) {
+      animation-delay: 0.3s;
+      opacity: 0.3;
+    }
+
+    @keyframes scrollArrows {
+      0%   { opacity: 0; transform: translateY(-4px) rotate(45deg); }
+      50%  { opacity: 1; }
+      100% { opacity: 0; transform: translateY(4px) rotate(45deg); }
     }
 
 
@@ -515,9 +608,7 @@
       font-style: italic;
     }
 
-    /* ========================================
-       SECCIÓN: METAS FUTURAS / FUTURE GOALS
-       ======================================== */
+    /* METAS FUTURAS */
     .future-goals-container {
       max-width: 1100px;
       margin: 0 auto;
@@ -598,7 +689,7 @@
       margin: 0;
     }
 
-    /* Responsive para metas futuras */
+    /* Responsive metas futuras */
     @media (max-width: 768px) {
       .goal-card {
         flex: 1 1 100%;
@@ -992,9 +1083,9 @@
   transform: scale(1.1);
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
+/* RESPONSIVE DESIGN */
 
-/* Tablets - 768px to 1024px */
+/* Tablets */
 @media screen and (max-width: 1024px) {
   .hero h1 {
     font-size: 38px;
@@ -1015,7 +1106,7 @@
   }
 }
 
-/* Mobile Large - 480px to 768px */
+/* Mobile */
 @media screen and (max-width: 768px) {
   header, section, footer {
     padding: 30px 15px;
@@ -1102,7 +1193,7 @@
   }
 }
 
-/* Mobile Small - less than 480px */
+/* Mobile small */
 @media screen and (max-width: 480px) {
   .hero h1 {
     font-size: 26px;
@@ -1159,5 +1250,103 @@
     width: 40px;
     height: 40px;
     border-width: 3px;
+  }
+}
+
+/* SIDE NAV */
+.side-nav {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.side-nav.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.side-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  padding: 13px 0;
+  position: relative;
+}
+
+.side-nav-label {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  opacity: 0;
+  transform: translateX(8px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.side-nav-item:hover .side-nav-label,
+.side-nav-item.active .side-nav-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.side-nav-item:hover .side-nav-label {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.side-nav-item.active .side-nav-label {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.side-nav-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.side-nav-item:hover .side-nav-dot {
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: scale(1.2);
+}
+
+.side-nav-item.active .side-nav-dot {
+  border-color: #ff6b6b;
+  background: #ff6b6b;
+  transform: scale(1.3);
+  box-shadow: 0 0 12px rgba(255, 107, 107, 0.5);
+}
+
+.side-nav-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 7px;
+  top: calc(50% + 9px);
+  width: 2px;
+  height: calc(100% - 4px);
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 1;
+}
+
+@media screen and (max-width: 1024px) {
+  .side-nav {
+    display: none;
   }
 }

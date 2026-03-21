@@ -60,6 +60,16 @@
     <h1>¡Hola! Soy Alexis Chapa</h1>
     <p>Technical Virtual Assistant | Junior Web Developer | Support</p>
     <a href="#contacto" class="btn">Contáctame</a>
+    <div class="scroll-indicator" id="scroll-indicator">
+      <div class="scroll-indicator-mouse">
+        <div class="scroll-indicator-wheel"></div>
+      </div>
+      <div class="scroll-indicator-arrows">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
   </header>
 
   <section id="about" class="about">
@@ -585,13 +595,16 @@
 
         <div class="project-card" data-category="fullstack" data-aos="fade-up" data-aos-delay="400">
           <div class="project-image">
-            <img src="img/fondo2.jpg" alt="Historial Academica" />
+            <img src="img/prefe1.jpeg" alt="Historial Academica" />
           </div>
           <div class="project-content">
-            <h3>Historial Academica - Sistema Web</h3>
-            <p>Mi proyecto mas grande. Un sistema web integral para la gestion de historiales academicos con multiples modulos y funcionalidades avanzadas.</p>
+            <h3>Historial Académico - Sistema Web</h3>
+            <p>Sistema web institucional para la gestión del historial académico de alumnos, actualmente en producción y en mejora continua.</p>
             <div class="project-tech">
-              <span class="tech-tag">Por definir</span>
+              <span class="tech-tag">React</span>
+              <span class="tech-tag">Node.js</span>
+              <span class="tech-tag">PostgreSQL</span>
+              <span class="tech-tag">Express</span>
             </div>
             <div class="project-stats">
               <span class="stat">
@@ -733,6 +746,30 @@
   <img id="image-viewer-img" class="image-viewer-img" src="" alt="Vista ampliada" />
   <span class="image-viewer-hint">Usa la rueda del ratón para hacer zoom · Arrastra para mover</span>
 </div>
+
+<!-- Panel lateral de navegación por secciones -->
+<nav class="side-nav" id="side-nav">
+  <a class="side-nav-item" href="#about">
+    <span class="side-nav-label">Sobre mí</span>
+    <span class="side-nav-dot"></span>
+  </a>
+  <a class="side-nav-item" href="#skills">
+    <span class="side-nav-label">Habilidades</span>
+    <span class="side-nav-dot"></span>
+  </a>
+  <a class="side-nav-item" href="#experience">
+    <span class="side-nav-label">Experiencia</span>
+    <span class="side-nav-dot"></span>
+  </a>
+  <a class="side-nav-item" href="#projects">
+    <span class="side-nav-label">Proyectos</span>
+    <span class="side-nav-dot"></span>
+  </a>
+  <a class="side-nav-item" href="#contacto">
+    <span class="side-nav-label">Contacto</span>
+    <span class="side-nav-dot"></span>
+  </a>
+</nav>
 
 <button id="language-toggle" class="language-btn" title="Cambiar idioma a inglés" aria-label="Cambiar al idioma inglés">
   <img id="lang-icon" src="img/EU.png" alt="Bandera de Estados Unidos"/>

@@ -1,6 +1,6 @@
-/* TEMA Y MODO OSCURO/CLARO */
+/* TEMA */
 
-/* Actualizar elementos existentes para usar variables */
+/* Variables de tema */
 .hero {
   background: var(--bg-hero) !important;
 }
@@ -57,7 +57,7 @@ footer {
   background-color: var(--text-primary) !important;
 }
 
-/* Animaciones del toggle de tema */
+/* Toggle de tema */
 .theme-toggle-animation {
   animation: themeSwitch 0.5s ease-in-out;
 }
@@ -68,7 +68,7 @@ footer {
   100% { transform: scale(1) rotate(360deg); }
 }
 
-/* Estados de validación del formulario para ambos temas */
+/* Formulario de contacto */
 .form-group {
   position: relative;
   margin-bottom: 1.5rem;
@@ -99,7 +99,6 @@ footer {
   padding: 0 5px;
 }
 
-/* Estados de focus y con contenido */
 .form-group input:focus + label,
 .form-group textarea:focus + label,
 .form-group input:not(:placeholder-shown) + label,
@@ -117,7 +116,6 @@ footer {
   box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3);
 }
 
-/* Estados de validación */
 .form-group.success input,
 .form-group.success textarea {
   border-color: #10b981;
@@ -140,7 +138,6 @@ footer {
   opacity: 1;
 }
 
-/* Botón de envío con loading */
 .submit-btn {
   position: relative;
   overflow: hidden;
@@ -173,7 +170,7 @@ footer {
   100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* SECCIÓN DE HABILIDADES TÉCNICAS */
+/* HABILIDADES */
 .skills-section {
   padding: 80px 20px;
   max-width: 1200px;
@@ -294,7 +291,7 @@ footer {
   animation: shimmer 2s infinite;
 }
 
-/* Responsive para habilidades */
+/* Responsive habilidades */
 @media screen and (max-width: 768px) {
   .skills-category {
     flex: 1 1 100%;
@@ -307,7 +304,7 @@ footer {
   }
 }
 
-/* TIMELINE SECTION STYLES */
+/* TIMELINE */
 .timeline-section {
   padding: 100px 20px;
   background: var(--bg-primary);
@@ -551,7 +548,7 @@ footer {
   border-color: rgba(96, 165, 250, 0.25);
 }
 
-/* Responsive Timeline */
+/* Responsive timeline */
 @media (max-width: 768px) {
   .timeline::before {
     left: 20px;
@@ -587,7 +584,7 @@ footer {
   }
 }
 
-/* COMPETENCIES SECTION STYLES */
+/* COMPETENCIAS */
 .competencies-section {
   padding: 100px 20px;
   background: var(--bg-secondary);
@@ -692,7 +689,6 @@ footer {
   font-size: 0.95rem;
 }
 
-/* SVG Gradients */
 .competencies-section::before {
   content: '';
   position: absolute;
@@ -705,7 +701,7 @@ footer {
   z-index: -1;
 }
 
-/* Responsive Competencies */
+/* Responsive competencias */
 @media (max-width: 768px) {
   .competencies-grid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -731,7 +727,7 @@ footer {
   }
 }
 
-/* PROJECTS SECTION STYLES */
+/* PROYECTOS */
 .projects-section {
   padding: 100px 20px;
   background: var(--bg-primary);
@@ -771,7 +767,7 @@ footer {
   background-clip: text;
 }
 
-/* Project Filters */
+/* Filtros */
 .project-filters {
   display: flex;
   justify-content: center;
@@ -801,7 +797,7 @@ footer {
   box-shadow: 0 8px 20px rgba(96, 165, 250, 0.3);
 }
 
-/* Projects Grid */
+/* Grid */
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -963,7 +959,7 @@ footer {
   cursor: pointer;
 }
 
-/* Responsive Projects */
+/* Responsive proyectos */
 @media (max-width: 768px) {
   .projects-grid {
     grid-template-columns: 1fr;
