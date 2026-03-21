@@ -2,61 +2,127 @@ const modal = document.getElementById('modal');
 const modalTitulo = document.getElementById('modal-title');
 const modalImg = document.getElementById('modal-img');
 const modalDesc = document.getElementById('modal-desc');
+const modalTech = document.getElementById('modal-tech');
+const modalStatus = document.getElementById('modal-status');
+const modalDate = document.getElementById('modal-date');
+const modalHighlights = document.getElementById('modal-highlights');
+const modalHighlightsSection = document.getElementById('modal-highlights-section');
+const modalActions = document.getElementById('modal-actions');
+const carouselCounter = document.getElementById('carousel-counter');
 
-//Load images for each project modal, divided by group number
 const imageGroups = {
-  0: ['img_project/1.png'],
-  1: ['img/fondo2.jpg'],
-  2: ['img/fondo2.jpg'],
-  3: ['img/fondo2.jpg']
+  0: ['img_project/1.png', 'img_project/2.png'],
+  1: ['img/teso2.jpeg', 'img/teso1.jpeg'],
+  2: ['img/biblio2.jpeg', 'img/biblio1.jpeg'],
+  3: ['img/cyber2.jpeg', 'img/cyber1.jpeg'],
+  4: ['img/fondo2.jpg']
 };
 
-//Title and description of each corresponding project modal by groups
 const projectDetails = {
   0: {
     title: 'Matrix Calculator GUI',
-    desc: 'Interactive Python application for matrix operations with intuitive Tkinter interface. Supports 1x1 to 5x5 matrices with addition and subtraction capabilities. Developed as a personal project to practice GUI in Python.'
+    desc: 'Interactive Python application for matrix operations with intuitive Tkinter interface. Supports 1x1 to 5x5 matrices with addition and subtraction capabilities. Developed as a personal project to practice GUI in Python.',
+    tech: ['Python', 'Tkinter', 'GUI'],
+    status: 'personal',
+    statusText: 'Personal Project',
+    date: '2025',
+    highlights: [
+      'Intuitive graphical interface with Tkinter',
+      'Supports matrices from 1x1 up to 5x5',
+      'Matrix addition and subtraction operations'
+    ],
+    links: {
+      // github: 'https://github.com/...',
+      // live: 'https://...'
+    }
   },
   1: {
     title: 'Billing System - Desktop App',
-    desc: 'My first desktop application featuring a billing system developed in Python. Uses local HTTP connection for communication between components and allows saving and managing local data efficiently. Developed between January and February 2026.'
+    desc: 'My first desktop application featuring a billing system developed in Python. Uses local HTTP connection for component communication and allows saving and managing local data efficiently.',
+    tech: ['Python', 'HTTP Local', 'Local Data'],
+    status: 'completed',
+    statusText: 'Completed',
+    date: 'January - February 2026',
+    highlights: [
+      'Component communication via local HTTP',
+      'Local data storage and management',
+      'First desktop application developed'
+    ],
+    links: {}
   },
   2: {
     title: 'Library System',
-    desc: 'Mini web system for managing check-in and check-out records of a library. Uses React on the frontend, Node.js for the backend, and PostgreSQL as the database, connected through a local network. Developed in February 2026.'
+    desc: 'Mini web system for managing check-in and check-out records of a library. Uses React on the frontend, Node.js for the backend, and PostgreSQL as the database, connected through a local network.',
+    tech: ['React', 'Node.js', 'PostgreSQL', 'Local Network'],
+    status: 'completed',
+    statusText: 'Completed',
+    date: 'February 2026',
+    highlights: [
+      'User check-in and check-out tracking',
+      'Database connection through local network',
+      'React frontend with Node.js backend'
+    ],
+    links: {}
   },
   3: {
     title: 'CyberManager - Desktop App',
-    desc: 'Desktop application for comprehensive CyberCafe management. Handles inventory, earnings, equipment monitoring, and printing account tracking. Built with C#, .NET 8.0, XAML, SignalR, PostgreSQL, and SQLite. Project in development since March 2026.'
+    desc: 'Desktop application for comprehensive CyberCafe management. Handles inventory, earnings, equipment monitoring, and printing account tracking. Implements multiple modern .NET technologies.',
+    tech: ['C#', '.NET 8.0', 'XAML', 'SignalR', 'PostgreSQL', 'SQLite'],
+    status: 'development',
+    statusText: 'In Development',
+    date: 'March 2026 - Present',
+    highlights: [
+      'Inventory management and earnings tracking',
+      'Real-time equipment monitoring with SignalR',
+      'Printing accounts and billing system',
+      'Dual database: PostgreSQL and SQLite'
+    ],
+    links: {}
+  },
+  4: {
+    title: 'Academic Record - Web System',
+    desc: 'Details to be defined.',
+    tech: ['To be defined'],
+    status: 'development',
+    statusText: 'In Development',
+    date: '',
+    highlights: [],
+    links: {}
   }
 };
 
 let currentImages = [];
 let currentIndex = 0;
 
-// Función para lazy loading de imágenes
+function updateCounter() {
+  if (currentImages.length > 1) {
+    carouselCounter.textContent = (currentIndex + 1) + ' / ' + currentImages.length;
+    carouselCounter.style.display = 'block';
+  } else {
+    carouselCounter.style.display = 'none';
+  }
+}
+
 function lazyLoadImage(src) {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    
-    // Añadir skeleton loading
     modalImg.classList.add('skeleton');
     modalImg.style.minHeight = '200px';
-    
+
     img.onload = () => {
       modalImg.classList.remove('skeleton');
       modalImg.style.minHeight = 'auto';
       modalImg.src = src;
-      modalImg.classList.add('animate-fade');
+      updateCounter();
       resolve();
     };
-    
+
     img.onerror = () => {
       modalImg.classList.remove('skeleton');
       modalImg.style.minHeight = 'auto';
       reject();
     };
-    
+
     img.src = src;
   });
 }
@@ -66,56 +132,193 @@ function abrirModal(index) {
   currentImages = imageGroups[index];
   currentIndex = 0;
 
+  // Title, description, date
   modalTitulo.textContent = data.title;
   modalDesc.textContent = data.desc;
-  
-  // Usar lazy loading para las imágenes
+  modalDate.textContent = data.date || '';
+
+  // Status badge
+  modalStatus.textContent = data.statusText;
+  modalStatus.className = 'modal-status status-' + data.status;
+
+  // Tech tags
+  modalTech.innerHTML = data.tech.map(function(t) {
+    return '<span class="modal-tech-tag">' + t + '</span>';
+  }).join('');
+
+  // Highlights
+  if (data.highlights && data.highlights.length > 0) {
+    modalHighlightsSection.style.display = '';
+    modalHighlights.innerHTML = data.highlights.map(function(h) {
+      return '<li>' + h + '</li>';
+    }).join('');
+  } else {
+    modalHighlightsSection.style.display = 'none';
+  }
+
+  // Action links
+  var linksHTML = '';
+  if (data.links && data.links.live) {
+    linksHTML += '<a href="' + data.links.live + '" target="_blank" rel="noopener noreferrer" class="modal-link modal-link-primary">' +
+      '<svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>' +
+      'View Project</a>';
+  }
+  if (data.links && data.links.github) {
+    linksHTML += '<a href="' + data.links.github + '" target="_blank" rel="noopener noreferrer" class="modal-link modal-link-secondary">' +
+      '<svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>' +
+      'GitHub</a>';
+  }
+  modalActions.innerHTML = linksHTML;
+  modalActions.style.display = linksHTML ? '' : 'none';
+
+  // Load image
   if (currentImages[currentIndex]) {
-    lazyLoadImage(currentImages[currentIndex]).catch(() => {
-      modalImg.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIG5vdCBmb3VuZDwvdGV4dD48L3N2Zz4=';
+    lazyLoadImage(currentImages[currentIndex]).catch(function() {
+      modalImg.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMTIxMjJiIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJzYW5zLXNlcmlmIiBmb250LXNpemU9IjE0IiBmaWxsPSIjNDQ0IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+SW1hZ2Ugbm90IGF2YWlsYWJsZTwvdGV4dD48L3N2Zz4=';
     });
   }
 
+  // Show/hide carousel controls
+  var controls = modal.querySelector('.carousel-controls');
+  controls.style.display = currentImages.length > 1 ? 'flex' : 'none';
+
+  // Animate open
   modal.classList.remove('hidden');
-  modal.classList.add('animate-fade');
+  requestAnimationFrame(function() {
+    modal.classList.add('active');
+  });
+  document.body.style.overflow = 'hidden';
 }
 
 function cerrarModal() {
-  modal.classList.add('hidden');
-  modal.classList.remove('animate-fade');
+  modal.classList.remove('active');
+  setTimeout(function() {
+    modal.classList.add('hidden');
+  }, 300);
+  document.body.style.overflow = '';
 }
 
-document.querySelectorAll('.btn.ver-proyecto').forEach((btn, index) => {
-  btn.addEventListener('click', () => abrirModal(index));
+document.querySelectorAll('.btn.ver-proyecto').forEach(function(btn, index) {
+  btn.addEventListener('click', function() { abrirModal(index); });
 });
 
-// Mejorar navegación del carrusel con lazy loading
-document.getElementById('prev-img').addEventListener('click', () => {
+// Carousel navigation
+document.getElementById('prev-img').addEventListener('click', function() {
   currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
-  if (currentImages[currentIndex]) {
-    lazyLoadImage(currentImages[currentIndex]);
-  }
+  if (currentImages[currentIndex]) { lazyLoadImage(currentImages[currentIndex]); }
 });
 
-document.getElementById('next-img').addEventListener('click', () => {
+document.getElementById('next-img').addEventListener('click', function() {
   currentIndex = (currentIndex + 1) % currentImages.length;
-  if (currentImages[currentIndex]) {
-    lazyLoadImage(currentImages[currentIndex]);
-  }
+  if (currentImages[currentIndex]) { lazyLoadImage(currentImages[currentIndex]); }
 });
 
-// Precargar la siguiente imagen
-function preloadNextImage() {
-  const nextIndex = (currentIndex + 1) % currentImages.length;
-  if (currentImages[nextIndex]) {
-    const img = new Image();
-    img.src = currentImages[nextIndex];
-  }
-}
+// Close on overlay click
+modal.querySelector('.modal-overlay').addEventListener('click', cerrarModal);
 
-// Cerrar modal con ESC
-document.addEventListener('keydown', (e) => {
+// Close on ESC
+document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
     cerrarModal();
   }
 });
+
+// ===== FULLSCREEN IMAGE VIEWER WITH ZOOM AND PAN =====
+(function() {
+  var viewer = document.getElementById('image-viewer');
+  var viewerImg = document.getElementById('image-viewer-img');
+  var viewerClose = viewer.querySelector('.image-viewer-close');
+  var viewerHint = viewer.querySelector('.image-viewer-hint');
+
+  var scale = 1;
+  var panX = 0;
+  var panY = 0;
+  var isDragging = false;
+  var startX = 0;
+  var startY = 0;
+
+  function updateTransform() {
+    viewerImg.style.transform = 'scale(' + scale + ') translate(' + panX + 'px, ' + panY + 'px)';
+  }
+
+  function openViewer(src) {
+    viewerImg.src = src;
+    scale = 1;
+    panX = 0;
+    panY = 0;
+    updateTransform();
+    viewer.classList.add('active');
+    viewerHint.classList.remove('hidden');
+    setTimeout(function() { viewerHint.classList.add('hidden'); }, 3000);
+  }
+
+  function closeViewer() {
+    viewer.classList.remove('active');
+  }
+
+  // Click on modal image opens the viewer
+  modalImg.addEventListener('click', function() {
+    if (modalImg.src && !modalImg.src.startsWith('data:')) {
+      openViewer(modalImg.src);
+    }
+  });
+
+  // Close viewer
+  viewerClose.addEventListener('click', closeViewer);
+
+  // Click outside image closes
+  viewer.addEventListener('click', function(e) {
+    if (e.target === viewer) closeViewer();
+  });
+
+  // ESC closes the viewer
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && viewer.classList.contains('active')) {
+      closeViewer();
+      e.stopPropagation();
+    }
+  });
+
+  // Zoom with mouse wheel
+  viewer.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    var delta = e.deltaY > 0 ? -0.15 : 0.15;
+    scale = Math.min(Math.max(0.5, scale + delta), 5);
+    if (scale <= 1) { panX = 0; panY = 0; }
+    updateTransform();
+  }, { passive: false });
+
+  // Pan with drag
+  viewer.addEventListener('mousedown', function(e) {
+    if (e.target === viewerClose) return;
+    if (scale > 1) {
+      isDragging = true;
+      startX = e.clientX - panX * scale;
+      startY = e.clientY - panY * scale;
+      viewer.classList.add('dragging');
+      e.preventDefault();
+    }
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (!isDragging) return;
+    panX = (e.clientX - startX) / scale;
+    panY = (e.clientY - startY) / scale;
+    updateTransform();
+  });
+
+  document.addEventListener('mouseup', function() {
+    isDragging = false;
+    viewer.classList.remove('dragging');
+  });
+
+  // Double click to reset/toggle zoom
+  viewerImg.addEventListener('dblclick', function() {
+    if (scale !== 1) {
+      scale = 1; panX = 0; panY = 0;
+    } else {
+      scale = 2.5;
+    }
+    updateTransform();
+  });
+})();

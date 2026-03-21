@@ -14,13 +14,6 @@
   <meta property="og:description" content="Technical Virtual Assistant & Junior Web Developer. Specialized in creating web solutions and technical support." />
   <meta property="og:image" content="https://yourwebsite.com/img/preview.png" />
 
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://yourwebsite.com/" />
-  <meta property="twitter:title" content="Alexis Chapa - Web Developer Portfolio" />
-  <meta property="twitter:description" content="Technical Virtual Assistant & Junior Web Developer. Specialized in creating web solutions and technical support." />
-  <meta property="twitter:image" content="https://yourwebsite.com/img/preview.png" />
-
   <title>Alexis Chapa - Web Developer Portfolio</title>
   <link rel="icon" type="image/x-icon" href="img/favicon.ico" />
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
@@ -412,7 +405,7 @@
           </div>
         </div>
         
-        <div class="timeline-item" data-aos="fade-left">
+        <div class="timeline-item" data-aos="fade-right">
           <div class="timeline-marker education"></div>
           <div class="timeline-content">
             <h3>Bachelor's Degree in Information Technology</h3>
@@ -517,7 +510,7 @@
         <!-- Project 2 - Billing System -->
         <div class="project-card" data-category="python" data-aos="fade-up" data-aos-delay="100">
           <div class="project-image">
-            <img src="img/fondo2.jpg" alt="Billing System" />
+            <img src="img/teso2.jpeg" alt="Billing System" />
           </div>
           <div class="project-content">
             <h3>Billing System - Desktop App</h3>
@@ -542,7 +535,7 @@
         <!-- Project 3 - Library System -->
         <div class="project-card" data-category="fullstack" data-aos="fade-up" data-aos-delay="200">
           <div class="project-image">
-            <img src="img/fondo2.jpg" alt="Library System" />
+            <img src="img/biblio2.jpeg" alt="Library System" />
           </div>
           <div class="project-content">
             <h3>Library System</h3>
@@ -567,7 +560,7 @@
         <!-- Project 4 - CyberManager -->
         <div class="project-card" data-category="desktop" data-aos="fade-up" data-aos-delay="300">
           <div class="project-image">
-            <img src="img/fondo2.jpg" alt="CyberManager" />
+            <img src="img/cyber2.jpeg" alt="CyberManager" />
           </div>
           <div class="project-content">
             <h3>CyberManager - Desktop App</h3>
@@ -589,6 +582,28 @@
               </span>
             </div>
             <button class="btn ver-proyecto" onclick="abrirModal(3)">View Details</button>
+          </div>
+        </div>
+
+        <div class="project-card" data-category="fullstack" data-aos="fade-up" data-aos-delay="400">
+          <div class="project-image">
+            <img src="img/fondo2.jpg" alt="Academic Record" />
+          </div>
+          <div class="project-content">
+            <h3>Academic Record - Web System</h3>
+            <p>My biggest project. A comprehensive web system for academic record management with multiple modules and advanced features.</p>
+            <div class="project-tech">
+              <span class="tech-tag">To be defined</span>
+            </div>
+            <div class="project-stats">
+              <span class="stat">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7 14l3-3 3 3 5-5v4h4V7h-6l5 5-3 3-3-3-3 3z"/>
+                </svg>
+                In Development
+              </span>
+            </div>
+            <button class="btn ver-proyecto" onclick="abrirModal(4)">View Details</button>
           </div>
         </div>
       </div>
@@ -656,22 +671,69 @@
     </div>
   </footer>
 
-<!-- Modal con carrusel -->
+<!-- Modal de proyecto -->
 <div id="modal" class="modal hidden">
-  <div class="modal-content animate-fade">
-    <span class="close-btn" onclick="cerrarModal()">&times;</span>
-    <h2 id="modal-title"></h2>
-    <div class="carousel">
-      <div class="image-container">
-        <img id="modal-img" src="" alt="Imagen del proyecto" />
-      </div>
-      <div class="carousel-controls">
-        <button id="prev-img">&#10094;</button>
-        <button id="next-img">&#10095;</button>
+  <div class="modal-overlay"></div>
+  <div class="modal-content">
+    <button class="close-btn" onclick="cerrarModal()" aria-label="Close modal">&times;</button>
+
+    <!-- Modal header -->
+    <div class="modal-header">
+      <h2 id="modal-title"></h2>
+      <div class="modal-header-meta">
+        <div class="modal-status" id="modal-status"></div>
+        <span class="modal-date" id="modal-date"></span>
       </div>
     </div>
-    <p id="modal-desc"></p>
+
+    <!-- Main body: side by side -->
+    <div class="modal-body">
+      <!-- Left side: carousel -->
+      <div class="modal-media">
+        <div class="carousel">
+          <div class="image-container">
+            <img id="modal-img" src="" alt="Project image" />
+          </div>
+          <div class="carousel-controls">
+            <button id="prev-img" aria-label="Previous image">&#10094;</button>
+            <button id="next-img" aria-label="Next image">&#10095;</button>
+          </div>
+          <div class="carousel-counter" id="carousel-counter"></div>
+        </div>
+      </div>
+
+      <!-- Right side: information -->
+      <div class="modal-info">
+        <!-- Description -->
+        <div class="modal-section">
+          <h4 class="modal-section-title">Description</h4>
+          <p id="modal-desc"></p>
+        </div>
+
+        <!-- Highlights -->
+        <div class="modal-section" id="modal-highlights-section">
+          <h4 class="modal-section-title">Key Highlights</h4>
+          <ul class="modal-highlights" id="modal-highlights"></ul>
+        </div>
+
+        <!-- Technologies -->
+        <div class="modal-section">
+          <h4 class="modal-section-title">Technologies & Tools</h4>
+          <div class="modal-tech" id="modal-tech"></div>
+        </div>
+
+        <!-- Project link -->
+        <div class="modal-section modal-actions" id="modal-actions"></div>
+      </div>
+    </div>
   </div>
+</div>
+
+<!-- Fullscreen image viewer -->
+<div id="image-viewer" class="image-viewer">
+  <button class="image-viewer-close" aria-label="Close viewer">&times;</button>
+  <img id="image-viewer-img" class="image-viewer-img" src="" alt="Enlarged view" />
+  <span class="image-viewer-hint">Scroll to zoom · Drag to pan</span>
 </div>
 
 <button id="language-toggle" class="language-btn" title="Change language to Spanish" aria-label="Switch to Spanish language">

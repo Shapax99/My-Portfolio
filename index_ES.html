@@ -403,7 +403,7 @@
           </div>
         </div>
         
-        <div class="timeline-item" data-aos="fade-left">
+        <div class="timeline-item" data-aos="fade-right">
           <div class="timeline-marker education"></div>
           <div class="timeline-content">
             <h3>Licenciatura en Tecnologías de la Información</h3>
@@ -508,7 +508,7 @@
         <!-- Proyecto 2 - Sistema de Cobros -->
         <div class="project-card" data-category="python" data-aos="fade-up" data-aos-delay="100">
           <div class="project-image">
-            <img src="img/fondo2.jpg" alt="Sistema de Cobros" />
+            <img src="img/teso2.jpeg" alt="Sistema de Cobros" />
           </div>
           <div class="project-content">
             <h3>Sistema de Cobros - App de Escritorio</h3>
@@ -533,7 +533,7 @@
         <!-- Proyecto 3 - Sistema de Biblioteca -->
         <div class="project-card" data-category="fullstack" data-aos="fade-up" data-aos-delay="200">
           <div class="project-image">
-            <img src="img/fondo2.jpg" alt="Sistema de Biblioteca" />
+            <img src="img/biblio2.jpeg" alt="Sistema de Biblioteca" />
           </div>
           <div class="project-content">
             <h3>Sistema de Biblioteca</h3>
@@ -558,7 +558,7 @@
         <!-- Proyecto 4 - CyberManager -->
         <div class="project-card" data-category="desktop" data-aos="fade-up" data-aos-delay="300">
           <div class="project-image">
-            <img src="img/fondo2.jpg" alt="CyberManager" />
+            <img src="img/cyber2.jpeg" alt="CyberManager" />
           </div>
           <div class="project-content">
             <h3>CyberManager - App de Escritorio</h3>
@@ -580,6 +580,28 @@
               </span>
             </div>
             <button class="btn ver-proyecto" onclick="abrirModal(3)">Ver Detalles</button>
+          </div>
+        </div>
+
+        <div class="project-card" data-category="fullstack" data-aos="fade-up" data-aos-delay="400">
+          <div class="project-image">
+            <img src="img/fondo2.jpg" alt="Historial Academica" />
+          </div>
+          <div class="project-content">
+            <h3>Historial Academica - Sistema Web</h3>
+            <p>Mi proyecto mas grande. Un sistema web integral para la gestion de historiales academicos con multiples modulos y funcionalidades avanzadas.</p>
+            <div class="project-tech">
+              <span class="tech-tag">Por definir</span>
+            </div>
+            <div class="project-stats">
+              <span class="stat">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7 14l3-3 3 3 5-5v4h4V7h-6l5 5-3 3-3-3-3 3z"/>
+                </svg>
+                En Desarrollo
+              </span>
+            </div>
+            <button class="btn ver-proyecto" onclick="abrirModal(4)">Ver Detalles</button>
           </div>
         </div>
       </div>
@@ -647,22 +669,69 @@
     </div>
   </footer>
 
-<!-- Modal con carrusel -->
+<!-- Modal de proyecto -->
 <div id="modal" class="modal hidden">
-  <div class="modal-content animate-fade">
-    <span class="close-btn" onclick="cerrarModal()">&times;</span>
-    <h2 id="modal-title"></h2>
-    <div class="carousel">
-      <div class="image-container">
-        <img id="modal-img" src="" alt="Imagen del proyecto" />
-      </div>
-      <div class="carousel-controls">
-        <button id="prev-img">&#10094;</button>
-        <button id="next-img">&#10095;</button>
+  <div class="modal-overlay"></div>
+  <div class="modal-content">
+    <button class="close-btn" onclick="cerrarModal()" aria-label="Cerrar modal">&times;</button>
+
+    <!-- Header del modal -->
+    <div class="modal-header">
+      <h2 id="modal-title"></h2>
+      <div class="modal-header-meta">
+        <div class="modal-status" id="modal-status"></div>
+        <span class="modal-date" id="modal-date"></span>
       </div>
     </div>
-    <p id="modal-desc"></p>
+
+    <!-- Cuerpo principal: lado a lado -->
+    <div class="modal-body">
+      <!-- Lado izquierdo: carrusel -->
+      <div class="modal-media">
+        <div class="carousel">
+          <div class="image-container">
+            <img id="modal-img" src="" alt="Imagen del proyecto" />
+          </div>
+          <div class="carousel-controls">
+            <button id="prev-img" aria-label="Imagen anterior">&#10094;</button>
+            <button id="next-img" aria-label="Imagen siguiente">&#10095;</button>
+          </div>
+          <div class="carousel-counter" id="carousel-counter"></div>
+        </div>
+      </div>
+
+      <!-- Lado derecho: información -->
+      <div class="modal-info">
+        <!-- Descripción -->
+        <div class="modal-section">
+          <h4 class="modal-section-title">Descripción</h4>
+          <p id="modal-desc"></p>
+        </div>
+
+        <!-- Detalles destacados -->
+        <div class="modal-section" id="modal-highlights-section">
+          <h4 class="modal-section-title">Detalles Destacados</h4>
+          <ul class="modal-highlights" id="modal-highlights"></ul>
+        </div>
+
+        <!-- Tecnologías -->
+        <div class="modal-section">
+          <h4 class="modal-section-title">Tecnologías y Herramientas</h4>
+          <div class="modal-tech" id="modal-tech"></div>
+        </div>
+
+        <!-- Link al proyecto -->
+        <div class="modal-section modal-actions" id="modal-actions"></div>
+      </div>
+    </div>
   </div>
+</div>
+
+<!-- Visor de imagen a pantalla completa -->
+<div id="image-viewer" class="image-viewer">
+  <button class="image-viewer-close" aria-label="Cerrar visor">&times;</button>
+  <img id="image-viewer-img" class="image-viewer-img" src="" alt="Vista ampliada" />
+  <span class="image-viewer-hint">Usa la rueda del ratón para hacer zoom · Arrastra para mover</span>
 </div>
 
 <button id="language-toggle" class="language-btn" title="Cambiar idioma a inglés" aria-label="Cambiar al idioma inglés">
