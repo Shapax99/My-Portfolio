@@ -125,28 +125,61 @@ function initParticleSystem() {
 }
 
 // Cursor personalizado
+const CURSOR_STORAGE_KEY = 'customCursorEnabled';
+
 function initCustomCursor() {
-    const cursorFollower = document.createElement('div');
-    cursorFollower.classList.add('cursor-follower');
-    document.body.appendChild(cursorFollower);
+    const noFinePointer = window.matchMedia('(hover: none)').matches ||
+                          window.matchMedia('(pointer: coarse)').matches;
+    if (noFinePointer) return;
 
-    const cursorCore = document.createElement('div');
-    cursorCore.classList.add('cursor-core');
-    document.body.appendChild(cursorCore);
+    let enabled = false;
+    try { enabled = localStorage.getItem(CURSOR_STORAGE_KEY) === 'true'; } catch (e) {}
 
-    const cursorTrail = document.createElement('div');
-    cursorTrail.classList.add('cursor-trail');
-    document.body.appendChild(cursorTrail);
+    let cursorCore, cursorFollower, cursorTrail;
+    let built = false;
+    let rafId = null;
+    let hasMoved = false;
 
-    let mouseX = 0, mouseY = 0;
-    let followerX = 0, followerY = 0;
-    let trailX = 0, trailY = 0;
-    let coreX = 0, coreY = 0;
+    let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+    let coreX = mouseX, coreY = mouseY;
+    let followerX = mouseX, followerY = mouseY;
+    let trailX = mouseX, trailY = mouseY;
 
-    document.addEventListener('mousemove', (e) => {
+    function onMouseMove(e) {
         mouseX = e.clientX;
         mouseY = e.clientY;
-    });
+        if (!hasMoved) {
+            hasMoved = true;
+            coreX = followerX = trailX = mouseX;
+            coreY = followerY = trailY = mouseY;
+        }
+    }
+
+    function onMouseDown() {
+        if (!cursorCore) return;
+        cursorCore.classList.add('cursor-click');
+        cursorFollower.classList.add('cursor-click');
+    }
+
+    function onMouseUp() {
+        if (!cursorCore) return;
+        cursorCore.classList.remove('cursor-click');
+        cursorFollower.classList.remove('cursor-click');
+    }
+
+    function addHover() {
+        if (!cursorCore) return;
+        cursorCore.classList.add('cursor-hover');
+        cursorFollower.classList.add('cursor-hover');
+        cursorTrail.classList.add('cursor-hover');
+    }
+
+    function removeHover() {
+        if (!cursorCore) return;
+        cursorCore.classList.remove('cursor-hover');
+        cursorFollower.classList.remove('cursor-hover');
+        cursorTrail.classList.remove('cursor-hover');
+    }
 
     function animateCursor() {
         const coreSpeed = 0.85;
@@ -168,35 +201,92 @@ function initCustomCursor() {
         cursorTrail.style.left = trailX + 'px';
         cursorTrail.style.top = trailY + 'px';
 
-        requestAnimationFrame(animateCursor);
+        rafId = requestAnimationFrame(animateCursor);
     }
-    animateCursor();
 
-    const interactiveElements = document.querySelectorAll('a, button, .project, .skill-item, .timeline-item, .goal-card, .project-card');
-    
-    interactiveElements.forEach(element => {
-        element.addEventListener('mouseenter', () => {
-            cursorFollower.classList.add('cursor-hover');
-            cursorCore.classList.add('cursor-hover');
-            cursorTrail.classList.add('cursor-hover');
+    function build() {
+        cursorFollower = document.createElement('div');
+        cursorFollower.classList.add('cursor-follower');
+        document.body.appendChild(cursorFollower);
+
+        cursorCore = document.createElement('div');
+        cursorCore.classList.add('cursor-core');
+        document.body.appendChild(cursorCore);
+
+        cursorTrail = document.createElement('div');
+        cursorTrail.classList.add('cursor-trail');
+        document.body.appendChild(cursorTrail);
+
+        const interactiveElements = document.querySelectorAll('a, button, .project, .skill-item, .timeline-item, .goal-card, .project-card');
+        interactiveElements.forEach(element => {
+            element.addEventListener('mouseenter', addHover);
+            element.addEventListener('mouseleave', removeHover);
         });
-        
-        element.addEventListener('mouseleave', () => {
-            cursorFollower.classList.remove('cursor-hover');
-            cursorCore.classList.remove('cursor-hover');
-            cursorTrail.classList.remove('cursor-hover');
-        });
+
+        built = true;
+    }
+
+    function enable() {
+        if (!built) build();
+        document.body.classList.add('custom-cursor-active');
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mousedown', onMouseDown);
+        document.addEventListener('mouseup', onMouseUp);
+        if (rafId === null) animateCursor();
+        enabled = true;
+        try { localStorage.setItem(CURSOR_STORAGE_KEY, 'true'); } catch (e) {}
+        updateButton();
+    }
+
+    function disable() {
+        document.body.classList.remove('custom-cursor-active');
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mousedown', onMouseDown);
+        document.removeEventListener('mouseup', onMouseUp);
+        if (rafId !== null) {
+            cancelAnimationFrame(rafId);
+            rafId = null;
+        }
+        removeHover();
+        if (cursorCore) {
+            cursorCore.classList.remove('cursor-click');
+            cursorFollower.classList.remove('cursor-click');
+        }
+        hasMoved = false;
+        enabled = false;
+        try { localStorage.setItem(CURSOR_STORAGE_KEY, 'false'); } catch (e) {}
+        updateButton();
+    }
+
+    const isSpanish = (document.documentElement.lang || 'en').toLowerCase().startsWith('es');
+    const labelOn = isSpanish ? 'Cursor especial: activado' : 'Custom cursor: on';
+    const labelOff = isSpanish ? 'Cursor especial: desactivado' : 'Custom cursor: off';
+
+    const btn = document.createElement('button');
+    btn.id = 'cursor-toggle';
+    btn.className = 'cursor-toggle-btn';
+    btn.type = 'button';
+    btn.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M7 2l12 11.2-5.5.5 3.3 6.4-2.7 1.4-3.3-6.4L7 19V2z"/></svg>';
+    document.body.appendChild(btn);
+
+    function updateButton() {
+        btn.classList.toggle('active', enabled);
+        btn.setAttribute('aria-pressed', String(enabled));
+        const label = enabled ? labelOn : labelOff;
+        btn.title = label;
+        btn.setAttribute('aria-label', label);
+    }
+
+    btn.addEventListener('click', () => {
+        if (enabled) {
+            disable();
+        } else {
+            enable();
+        }
     });
 
-    document.addEventListener('mousedown', () => {
-        cursorCore.classList.add('cursor-click');
-        cursorFollower.classList.add('cursor-click');
-    });
-
-    document.addEventListener('mouseup', () => {
-        cursorCore.classList.remove('cursor-click');
-        cursorFollower.classList.remove('cursor-click');
-    });
+    updateButton();
+    if (enabled) enable();
 }
 
 // Scroll
@@ -247,12 +337,59 @@ function initInteractiveAnimations() {
 // CSS para efectos
 const effectsStyle = document.createElement('style');
 effectsStyle.textContent = `
-    /* Custom Cursor - Mejorado */
-    * {
+    /* Custom Cursor */
+    body.custom-cursor-active,
+    body.custom-cursor-active * {
         cursor: none !important;
     }
-    
-    /* Núcleo del cursor - Punto central que sigue directo al mouse */
+
+    .cursor-core,
+    .cursor-follower,
+    .cursor-trail {
+        display: none;
+    }
+
+    body.custom-cursor-active .cursor-core,
+    body.custom-cursor-active .cursor-follower,
+    body.custom-cursor-active .cursor-trail {
+        display: block;
+    }
+
+    .cursor-toggle-btn {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 55px;
+        height: 55px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: #3d3d3d solid 5px;
+        border-radius: 50%;
+        background: rgba(20, 22, 34, 0.6);
+        color: #cfd3dc;
+        cursor: pointer;
+        z-index: 1001;
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+        transition: transform 0.2s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .cursor-toggle-btn:hover {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    .cursor-toggle-btn:active {
+        transform: scale(0.95);
+    }
+
+    .cursor-toggle-btn.active {
+        border-color: #48dbfb;
+        color: #48dbfb;
+        box-shadow: 0 0 12px rgba(72, 219, 251, 0.5);
+    }
+
+    /* Nucleo del cursor - Punto central que sigue directo al mouse */
     .cursor-core {
         position: fixed;
         width: 12px;
@@ -361,16 +498,18 @@ effectsStyle.textContent = `
         }
     }
 
-    /* Disable cursor on mobile */
+    /* Desactivar cursor especial y su boton en movil */
     @media (max-width: 768px) {
-        * {
+        body.custom-cursor-active,
+        body.custom-cursor-active * {
             cursor: auto !important;
         }
 
         .cursor-core,
         .cursor-follower,
-        .cursor-trail {
-            display: none;
+        .cursor-trail,
+        .cursor-toggle-btn {
+            display: none !important;
         }
     }
 `;
