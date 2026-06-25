@@ -38,7 +38,7 @@ const projectDetails = {
   },
   1: {
     title: 'Billing System - Desktop App',
-    desc: 'My first desktop application featuring a billing system developed in Python. Uses local HTTP connection for component communication and allows saving and managing local data efficiently.',
+    desc: 'My first desktop application featuring a billing system developed in Python. Uses local HTTP connection for component communication and allows saving and managing local data efficiently. It is currently in production and its performance has been efficient, fulfilling its main purpose.',
     tech: ['Python', 'HTTP Local', 'Local Data'],
     status: 'completed',
     statusText: 'Completed',

@@ -21,6 +21,8 @@
   <link rel="stylesheet" href="styles/modal.css">
   <link rel="stylesheet" href="styles/animacion.css">
   <link rel="stylesheet" href="styles/theme.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
@@ -83,9 +85,10 @@
       <div class="about-content">
         <div class="about-intro">
           <p class="intro-text">
-            Hello! I'm a web programmer passionate about technology and development. 
-            I'm currently pursuing a degree in video game programming and specialize 
-            in tasks that combine logic, organization, and attention to detail.
+            Hello! I'm Alexis, and I consider myself a programmer who's a technology enthusiast.
+            I'm currently pursuing a degree in Information Technology with hands-on experience,
+            and I specialize in tasks that combine logic, organization, and attention, as well
+            as development and programming.
           </p>
         </div>
         
@@ -495,7 +498,7 @@
         <!-- Project 1 - Matrix Calculator -->
         <div class="project-card" data-category="python" data-aos="fade-up">
           <div class="project-image">
-            <img src="img_project/1.png" alt="Matrix Calculator" />
+            <img src="img_project/1.png" alt="Matrix Calculator" loading="lazy" decoding="async" />
           </div>
           <div class="project-content">
             <h3>Matrix Calculator GUI</h3>
@@ -520,11 +523,11 @@
         <!-- Project 2 - Billing System -->
         <div class="project-card" data-category="python" data-aos="fade-up" data-aos-delay="100">
           <div class="project-image">
-            <img src="img/teso2.jpeg" alt="Billing System" />
+            <img src="img/teso2.jpeg" alt="Billing System" loading="lazy" decoding="async" />
           </div>
           <div class="project-content">
             <h3>Billing System - Desktop App</h3>
-            <p>My first desktop application featuring a billing system developed in Python. Uses local HTTP connection for communication and allows saving and managing local data efficiently.</p>
+            <p>My first desktop application featuring a billing system developed in Python. Uses local HTTP connection for communication and allows saving and managing local data efficiently. It is currently in production and its performance has been efficient, fulfilling its main purpose.</p>
             <div class="project-tech">
               <span class="tech-tag">Python</span>
               <span class="tech-tag">Local HTTP</span>
@@ -545,7 +548,7 @@
         <!-- Project 3 - Library System -->
         <div class="project-card" data-category="fullstack" data-aos="fade-up" data-aos-delay="200">
           <div class="project-image">
-            <img src="img/biblio2.jpeg" alt="Library System" />
+            <img src="img/biblio2.jpeg" alt="Library System" loading="lazy" decoding="async" />
           </div>
           <div class="project-content">
             <h3>Library System</h3>
@@ -570,7 +573,7 @@
         <!-- Project 4 - CyberManager -->
         <div class="project-card" data-category="desktop" data-aos="fade-up" data-aos-delay="300">
           <div class="project-image">
-            <img src="img/cyber2.jpeg" alt="CyberManager" />
+            <img src="img/cyber2.jpeg" alt="CyberManager" loading="lazy" decoding="async" />
           </div>
           <div class="project-content">
             <h3>CyberManager - Desktop App</h3>
@@ -597,7 +600,7 @@
 
         <div class="project-card" data-category="fullstack" data-aos="fade-up" data-aos-delay="400">
           <div class="project-image">
-            <img src="img/prefe1.jpeg" alt="Academic Record" />
+            <img src="img/prefe1.jpeg" alt="Academic Record" loading="lazy" decoding="async" />
           </div>
           <div class="project-content">
             <h3>Academic Record - Web System</h3>
@@ -626,32 +629,64 @@
   <section id="contacto">
     <h2>Contact</h2>
     <p>
-      Write to me at <a href="mailto:alexiscantu149@gmail.com">alexiscantu149@gmail.com</a>
-      <br>
-      <p>(Demo form, not functional at the moment)</p>
+      Write to me at <a href="mailto:alexiscantu149@gmail.com">alexiscantu149@gmail.com</a> or use the form below.
     </p>
-    <form class="contact-form" id="contact-form">
-      <div class="form-group">
-        <input type="text" id="name" placeholder=" " required />
-        <label for="name">Full Name</label>
-        <div class="error-message">Please enter your full name</div>
+    <form class="contact-form" id="contact-form" novalidate
+          data-success="Message sent successfully. Thank you for reaching out — I'll reply soon."
+          data-error="Could not send your message. Please try again or email me directly."
+          data-network="A connection error occurred. Please check your network and try again."
+          data-invalid="Please fix the highlighted fields and try again."
+          data-default-subject="New message from portfolio"
+          data-from-name="Alexis Chapa Portfolio">
+      <div class="form-status" id="form-status" role="status" aria-live="polite" hidden>
+        <span class="form-status__icon" aria-hidden="true"></span>
+        <span class="form-status__text"></span>
       </div>
-      
+
       <div class="form-group">
-        <input type="email" id="email" placeholder=" " required />
-        <label for="email">Email Address</label>
-        <div class="error-message">Please enter a valid email address</div>
+        <input type="text" id="name" name="name" placeholder=" " required autocomplete="name" aria-required="true" aria-describedby="name-error" />
+        <label for="name">Full Name <span class="req" aria-hidden="true">*</span></label>
+        <div class="error-message" id="name-error">Please enter your full name (minimum 2 characters)</div>
       </div>
-      
+
       <div class="form-group">
-        <textarea id="message" placeholder=" " rows="5" required></textarea>
-        <label for="message">Your Message</label>
-        <div class="error-message">Please enter your message (minimum 10 characters)</div>
+        <input type="email" id="email" name="email" placeholder=" " required autocomplete="email" aria-required="true" aria-describedby="email-error" />
+        <label for="email">Email Address <span class="req" aria-hidden="true">*</span></label>
+        <div class="error-message" id="email-error">Please enter a valid email address</div>
       </div>
-      
+
+      <div class="form-group form-group--select">
+        <select id="reason" name="reason" required aria-required="true" aria-describedby="reason-error">
+          <option value="" disabled selected hidden></option>
+          <option value="Job opportunity">Job opportunity</option>
+          <option value="Freelance project">Freelance project</option>
+          <option value="Collaboration">Collaboration</option>
+          <option value="Just saying hi">Just saying hi</option>
+        </select>
+        <label for="reason">What is this about? <span class="req" aria-hidden="true">*</span></label>
+        <div class="error-message" id="reason-error">Please choose a topic</div>
+      </div>
+
+      <div class="form-group">
+        <input type="text" id="subject" name="subject" placeholder=" " autocomplete="off" maxlength="120" aria-describedby="subject-hint" />
+        <label for="subject">Subject <span class="opt">(optional)</span></label>
+        <div class="field-hint" id="subject-hint">Add a short subject if you'd like.</div>
+      </div>
+
+      <div class="form-group">
+        <textarea id="message" name="message" placeholder=" " rows="5" required minlength="10" maxlength="1000" aria-required="true" aria-describedby="message-error message-count"></textarea>
+        <label for="message">Your Message <span class="req" aria-hidden="true">*</span></label>
+        <div class="message-meta">
+          <span class="error-message" id="message-error">Please enter your message (minimum 10 characters)</span>
+          <span class="char-count" id="message-count" aria-live="polite" data-min="10" data-max="1000">0 / 1000</span>
+        </div>
+      </div>
+
+      <input type="text" name="botcheck" id="botcheck" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
       <button type="submit" class="btn submit-btn">
-        <span class="loading-spinner"></span>
-        Send Message
+        <span class="loading-spinner" aria-hidden="true"></span>
+        <span class="btn-label">Send Message</span>
       </button>
     </form>
   </section>
@@ -673,14 +708,14 @@
         <a href="mailto:alexiscantu149@gmail.com" aria-label="Email" class="social-link">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
         </a>
-        <a href="https://github.com/Sobaii" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="social-link">
+        <a href="https://github.com/Shapax99" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="social-link">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
         </a>
       </div>
     </div>
     <div class="footer-bottom">
       <p>&copy; <span id="year"></span> Alexis Chapa. All rights reserved.</p>
-      <p class="footer-version">v2.0.0</p>
+      <p class="footer-version">v2.1.0 · June 24, 2026</p>
     </div>
   </footer>
 
@@ -778,13 +813,13 @@
 </button>
 
 </body>
-<script src="scripts/index_EN.js"></script>
-<script src="scripts/modal_EN.js"></script>
-<script src="scripts/animacion.js"></script>
-<script src="scripts/carrusel.js"></script>
-<script src="scripts/skills.js"></script>
-<script src="scripts/timeline.js"></script>
-<script src="scripts/competencies.js"></script>
-<script src="scripts/visual-effects.js"></script>
-<script src="scripts/project-filters.js"></script>
+<script defer src="scripts/index_EN.js"></script>
+<script defer src="scripts/modal_EN.js"></script>
+<script defer src="scripts/animacion.js"></script>
+<script defer src="scripts/carrusel.js"></script>
+<script defer src="scripts/skills.js"></script>
+<script defer src="scripts/timeline.js"></script>
+<script defer src="scripts/competencies.js"></script>
+<script defer src="scripts/visual-effects.js"></script>
+<script defer src="scripts/project-filters.js"></script>
 </html>

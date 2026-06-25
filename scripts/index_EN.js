@@ -1,106 +1,149 @@
 // Actualizar año
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// VALIDACIÓN DEL FORMULARIO
+// FORMULARIO DE CONTACTO
+const WEB3FORMS_ACCESS_KEY = '7f7af657-6724-4be5-b6ce-a0951f06480f';
+
 const form = document.getElementById('contact-form');
 const nameInput = document.getElementById('name');
 const emailInput = document.getElementById('email');
+const reasonSelect = document.getElementById('reason');
+const subjectInput = document.getElementById('subject');
 const messageInput = document.getElementById('message');
 const submitBtn = form.querySelector('.submit-btn');
+const honeypot = document.getElementById('botcheck');
+const statusEl = document.getElementById('form-status');
+const statusText = statusEl.querySelector('.form-status__text');
+const charCount = document.getElementById('message-count');
 
-function validateName(name) {
-    return name.trim().length >= 2;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+let submitted = false;
+
+function isValid(input) {
+    const v = input.value.trim();
+    if (input === nameInput) return v.length >= 2;
+    if (input === emailInput) return EMAIL_RE.test(v);
+    if (input === messageInput) return v.length >= 10;
+    if (input === reasonSelect) return v !== '';
+    return true;
 }
 
-function validateEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-function validateMessage(message) {
-    return message.trim().length >= 10;
-}
-
-function showError(input, message) {
-    const formGroup = input.parentElement;
-    formGroup.classList.remove('success');
-    formGroup.classList.add('error');
-    const errorElement = formGroup.querySelector('.error-message');
-    errorElement.textContent = message;
-}
-
-function showSuccess(input) {
-    const formGroup = input.parentElement;
-    formGroup.classList.remove('error');
-    formGroup.classList.add('success');
-}
-
-nameInput.addEventListener('input', () => {
-    if (validateName(nameInput.value)) {
-        showSuccess(nameInput);
-    } else if (nameInput.value.length > 0) {
-        showError(nameInput, 'Name must be at least 2 characters long');
+function setFieldState(input, ok) {
+    const group = input.closest('.form-group');
+    if (!group) return;
+    if (input.value.trim() === '' && !submitted) {
+        group.classList.remove('success', 'error');
+        input.setAttribute('aria-invalid', 'false');
+        return;
     }
+    group.classList.toggle('success', ok);
+    group.classList.toggle('error', !ok);
+    input.setAttribute('aria-invalid', String(!ok));
+}
+
+[nameInput, emailInput, messageInput, reasonSelect].forEach((input) => {
+    const evt = input === reasonSelect ? 'change' : 'input';
+    input.addEventListener(evt, () => setFieldState(input, isValid(input)));
 });
 
-emailInput.addEventListener('input', () => {
-    if (validateEmail(emailInput.value)) {
-        showSuccess(emailInput);
-    } else if (emailInput.value.length > 0) {
-        showError(emailInput, 'Please enter a valid email address');
-    }
+reasonSelect.addEventListener('change', () => {
+    reasonSelect.closest('.form-group').classList.toggle('filled', reasonSelect.value !== '');
 });
 
+const ccMin = parseInt(charCount.dataset.min, 10) || 0;
+const ccMax = parseInt(charCount.dataset.max, 10) || 1000;
 messageInput.addEventListener('input', () => {
-    if (validateMessage(messageInput.value)) {
-        showSuccess(messageInput);
-    } else if (messageInput.value.length > 0) {
-        showError(messageInput, 'Message must be at least 10 characters long');
-    }
+    const n = messageInput.value.length;
+    charCount.textContent = n + ' / ' + ccMax;
+    charCount.classList.toggle('valid', n >= ccMin && n <= ccMax);
+    charCount.classList.toggle('over', n > ccMax);
 });
 
-form.addEventListener('submit', function(e) {
+function showStatus(type, key) {
+    statusEl.setAttribute('aria-live', type === 'error' ? 'assertive' : 'polite');
+    statusEl.classList.remove('is-success', 'is-error');
+    statusEl.classList.add(type === 'success' ? 'is-success' : 'is-error');
+    statusText.textContent = form.dataset[key] || '';
+    statusEl.hidden = false;
+    requestAnimationFrame(() => statusEl.classList.add('show'));
+}
+
+function clearStatus() {
+    statusEl.classList.remove('show');
+    statusEl.hidden = true;
+}
+
+form.addEventListener('submit', function (e) {
     e.preventDefault();
-    
-    let isValid = true;
-    
-    // Validar todos los campos
-    if (!validateName(nameInput.value)) {
-        showError(nameInput, 'Please enter your full name');
-        isValid = false;
-    } else {
-        showSuccess(nameInput);
+    submitted = true;
+    clearStatus();
+
+    if (honeypot && honeypot.value.trim() !== '') return;
+
+    const fields = [nameInput, emailInput, reasonSelect, messageInput];
+    let firstInvalid = null;
+    fields.forEach((input) => {
+        const ok = isValid(input);
+        setFieldState(input, ok);
+        if (!ok && !firstInvalid) firstInvalid = input;
+    });
+
+    if (firstInvalid) {
+        showStatus('error', 'invalid');
+        firstInvalid.focus();
+        return;
     }
-    
-    if (!validateEmail(emailInput.value)) {
-        showError(emailInput, 'Please enter a valid email address');
-        isValid = false;
-    } else {
-        showSuccess(emailInput);
-    }
-    
-    if (!validateMessage(messageInput.value)) {
-        showError(messageInput, 'Message must be at least 10 characters long');
-        isValid = false;
-    } else {
-        showSuccess(messageInput);
-    }
-    
-    if (isValid) {
-        submitBtn.classList.add('loading');
-        submitBtn.disabled = true;
-        
-        setTimeout(() => {
+
+    submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
+    submitBtn.setAttribute('aria-busy', 'true');
+
+    const reasonVal = reasonSelect.value;
+    const subjectVal = subjectInput.value.trim();
+    const subjectLine = subjectVal
+        ? '[' + reasonVal + '] ' + subjectVal
+        : '[' + reasonVal + '] ' + (form.dataset.defaultSubject || 'New message from portfolio');
+
+    const payload = {
+        access_key: WEB3FORMS_ACCESS_KEY,
+        from_name: form.dataset.fromName || 'Portfolio',
+        subject: subjectLine,
+        name: nameInput.value.trim(),
+        email: emailInput.value.trim(),
+        message: messageInput.value.trim(),
+        reason: reasonVal,
+        botcheck: ''
+    };
+
+    fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                showStatus('success', 'success');
+                form.reset();
+                submitted = false;
+                document.querySelectorAll('.contact-form .form-group').forEach((group) => {
+                    group.classList.remove('success', 'error', 'filled');
+                });
+                fields.forEach((input) => input.setAttribute('aria-invalid', 'false'));
+                charCount.textContent = '0 / ' + ccMax;
+                charCount.classList.remove('valid', 'over');
+            } else {
+                showStatus('error', 'error');
+            }
+        })
+        .catch(() => {
+            showStatus('error', 'network');
+        })
+        .finally(() => {
             submitBtn.classList.remove('loading');
             submitBtn.disabled = false;
-            alert('Message sent successfully! Thank you for contacting me.');
-            form.reset();
-            
-            document.querySelectorAll('.form-group').forEach(group => {
-                group.classList.remove('success', 'error');
-            });
-        }, 2000);
-    }
+            submitBtn.removeAttribute('aria-busy');
+        });
 });
 
 document.querySelector("#language-toggle").addEventListener("click", () => {
@@ -165,16 +208,16 @@ window.addEventListener('scroll', () => {
     } else {
         sideNav.classList.remove('visible');
     }
-    
+
     sections.forEach(section => {
         const sectionTop = section.offsetTop;
         const sectionHeight = section.clientHeight;
-        
+
         if (window.scrollY >= sectionTop - 100) {
             current = section.getAttribute('id');
         }
     });
-    
+
     navLinks.forEach(link => {
         link.classList.remove('active');
         if (link.getAttribute('href') === `#${current}`) {

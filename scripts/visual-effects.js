@@ -1,16 +1,24 @@
 // Efectos visuales
 
-document.addEventListener('DOMContentLoaded', function() {
+function initVisualEffects() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent) || window.innerWidth <= 768;
 
     if (!prefersReducedMotion && !isMobile) {
         initParticleSystem();
+    }
+    if (!isMobile) {
         initCustomCursor();
     }
     initScrollEffects();
     initInteractiveAnimations();
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initVisualEffects);
+} else {
+    initVisualEffects();
+}
 
 // Partículas
 function initParticleSystem() {
@@ -128,10 +136,6 @@ function initParticleSystem() {
 const CURSOR_STORAGE_KEY = 'customCursorEnabled';
 
 function initCustomCursor() {
-    const noFinePointer = window.matchMedia('(hover: none)').matches ||
-                          window.matchMedia('(pointer: coarse)').matches;
-    if (noFinePointer) return;
-
     let enabled = false;
     try { enabled = localStorage.getItem(CURSOR_STORAGE_KEY) === 'true'; } catch (e) {}
 
@@ -266,7 +270,7 @@ function initCustomCursor() {
     btn.id = 'cursor-toggle';
     btn.className = 'cursor-toggle-btn';
     btn.type = 'button';
-    btn.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M7 2l12 11.2-5.5.5 3.3 6.4-2.7 1.4-3.3-6.4L7 19V2z"/></svg>';
+    btn.innerHTML = '<svg viewBox="6 1 14 22" fill="currentColor" aria-hidden="true"><path d="M7 2l12 11.2-5.5.5 3.3 6.4-2.7 1.4-3.3-6.4L7 19V2z"/></svg>';
     document.body.appendChild(btn);
 
     function updateButton() {
@@ -357,14 +361,15 @@ effectsStyle.textContent = `
 
     .cursor-toggle-btn {
         position: fixed;
-        bottom: 90px;
-        right: 20px;
-        width: 55px;
-        height: 55px;
+        bottom: 104px;
+        right: 36.5px;
+        width: 44px;
+        height: 44px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border: #3d3d3d solid 5px;
+        padding: 0;
+        border: #3d3d3d solid 4px;
         border-radius: 50%;
         background: rgba(20, 22, 34, 0.6);
         color: #cfd3dc;
@@ -373,6 +378,12 @@ effectsStyle.textContent = `
         -webkit-backdrop-filter: blur(6px);
         backdrop-filter: blur(6px);
         transition: transform 0.2s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .cursor-toggle-btn svg {
+        display: block;
+        width: 20px;
+        height: 20px;
     }
 
     .cursor-toggle-btn:hover {

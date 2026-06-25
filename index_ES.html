@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="styles/modal.css">
   <link rel="stylesheet" href="styles/animacion.css">
   <link rel="stylesheet" href="styles/theme.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
@@ -82,9 +84,10 @@
       <div class="about-content">
         <div class="about-intro">
           <p class="intro-text">
-            ¡Hola! Soy un programador web apasionado por la tecnología y el desarrollo. 
-            Actualmente estoy cursando una licenciatura en programación de videojuegos y 
-            me especializo en tareas que combinan lógica, organización y atención al detalle.
+            ¡Hola! Soy Alexis, me considero un programador fanático de la tecnología.
+            Actualmente estoy cursando una licenciatura en Tecnologías de Información con
+            experiencia práctica y me especializo en tareas que combinan lógica, organización
+            y atención, además del desarrollo y la programación.
           </p>
         </div>
         
@@ -493,7 +496,7 @@
         <!-- Proyecto 1 - Calculadora de Matrices -->
         <div class="project-card" data-category="python" data-aos="fade-up">
           <div class="project-image">
-            <img src="img_project/1.png" alt="Calculadora de Matrices" />
+            <img src="img_project/1.png" alt="Calculadora de Matrices" loading="lazy" decoding="async" />
           </div>
           <div class="project-content">
             <h3>Calculadora de Matrices GUI</h3>
@@ -518,11 +521,11 @@
         <!-- Proyecto 2 - Sistema de Cobros -->
         <div class="project-card" data-category="python" data-aos="fade-up" data-aos-delay="100">
           <div class="project-image">
-            <img src="img/teso2.jpeg" alt="Sistema de Cobros" />
+            <img src="img/teso2.jpeg" alt="Sistema de Cobros" loading="lazy" decoding="async" />
           </div>
           <div class="project-content">
             <h3>Sistema de Cobros - App de Escritorio</h3>
-            <p>Mi primera aplicacion de escritorio con un sistema de cobros desarrollado en Python. Utiliza conexion local HTTP para comunicacion y permite guardar y manejar datos locales de forma eficiente.</p>
+            <p>Mi primera aplicacion de escritorio con un sistema de cobros desarrollado en Python. Utiliza conexion local HTTP para comunicacion y permite guardar y manejar datos locales de forma eficiente. Actualmente está en producción y su desempeño ha sido eficiente, cumpliendo con su propósito principal.</p>
             <div class="project-tech">
               <span class="tech-tag">Python</span>
               <span class="tech-tag">HTTP Local</span>
@@ -543,7 +546,7 @@
         <!-- Proyecto 3 - Sistema de Biblioteca -->
         <div class="project-card" data-category="fullstack" data-aos="fade-up" data-aos-delay="200">
           <div class="project-image">
-            <img src="img/biblio2.jpeg" alt="Sistema de Biblioteca" />
+            <img src="img/biblio2.jpeg" alt="Sistema de Biblioteca" loading="lazy" decoding="async" />
           </div>
           <div class="project-content">
             <h3>Sistema de Biblioteca</h3>
@@ -568,7 +571,7 @@
         <!-- Proyecto 4 - CyberManager -->
         <div class="project-card" data-category="desktop" data-aos="fade-up" data-aos-delay="300">
           <div class="project-image">
-            <img src="img/cyber2.jpeg" alt="CyberManager" />
+            <img src="img/cyber2.jpeg" alt="CyberManager" loading="lazy" decoding="async" />
           </div>
           <div class="project-content">
             <h3>CyberManager - App de Escritorio</h3>
@@ -595,7 +598,7 @@
 
         <div class="project-card" data-category="fullstack" data-aos="fade-up" data-aos-delay="400">
           <div class="project-image">
-            <img src="img/prefe1.jpeg" alt="Historial Academica" />
+            <img src="img/prefe1.jpeg" alt="Historial Academica" loading="lazy" decoding="async" />
           </div>
           <div class="project-content">
             <h3>Historial Académico - Sistema Web</h3>
@@ -624,32 +627,64 @@
   <section id="contacto">
     <h2>Contacto</h2>
     <p>
-      Escríbeme a <a href="mailto:alexiscantu149@gmail.com">alexiscantu149@gmail.com</a>
-      <br>
-      <p>(Formulario demo, no funcional por el momento)</p>
+      Escríbeme a <a href="mailto:alexiscantu149@gmail.com">alexiscantu149@gmail.com</a> o usa el formulario de abajo.
     </p>
-    <form class="contact-form" id="contact-form">
-      <div class="form-group">
-        <input type="text" id="name" placeholder=" " required />
-        <label for="name">Nombre Completo</label>
-        <div class="error-message">Por favor ingresa tu nombre completo</div>
+    <form class="contact-form" id="contact-form" novalidate
+          data-success="Mensaje enviado correctamente. Gracias por escribir — te responderé pronto."
+          data-error="No se pudo enviar tu mensaje. Inténtalo de nuevo o escríbeme directamente."
+          data-network="Ocurrió un error de conexión. Revisa tu red e inténtalo de nuevo."
+          data-invalid="Por favor corrige los campos marcados e inténtalo de nuevo."
+          data-default-subject="Nuevo mensaje desde el portafolio"
+          data-from-name="Portafolio Alexis Chapa">
+      <div class="form-status" id="form-status" role="status" aria-live="polite" hidden>
+        <span class="form-status__icon" aria-hidden="true"></span>
+        <span class="form-status__text"></span>
       </div>
-      
+
       <div class="form-group">
-        <input type="email" id="email" placeholder=" " required />
-        <label for="email">Correo Electrónico</label>
-        <div class="error-message">Por favor ingresa un correo electrónico válido</div>
+        <input type="text" id="name" name="name" placeholder=" " required autocomplete="name" aria-required="true" aria-describedby="name-error" />
+        <label for="name">Nombre Completo <span class="req" aria-hidden="true">*</span></label>
+        <div class="error-message" id="name-error">Por favor ingresa tu nombre completo (mínimo 2 caracteres)</div>
       </div>
-      
+
       <div class="form-group">
-        <textarea id="message" placeholder=" " rows="5" required></textarea>
-        <label for="message">Tu Mensaje</label>
-        <div class="error-message">Por favor ingresa tu mensaje (mínimo 10 caracteres)</div>
+        <input type="email" id="email" name="email" placeholder=" " required autocomplete="email" aria-required="true" aria-describedby="email-error" />
+        <label for="email">Correo Electrónico <span class="req" aria-hidden="true">*</span></label>
+        <div class="error-message" id="email-error">Por favor ingresa un correo electrónico válido</div>
       </div>
-      
+
+      <div class="form-group form-group--select">
+        <select id="reason" name="reason" required aria-required="true" aria-describedby="reason-error">
+          <option value="" disabled selected hidden></option>
+          <option value="Oportunidad laboral">Oportunidad laboral</option>
+          <option value="Proyecto freelance">Proyecto freelance</option>
+          <option value="Colaboración">Colaboración</option>
+          <option value="Solo saludar">Solo saludar</option>
+        </select>
+        <label for="reason">¿De qué se trata? <span class="req" aria-hidden="true">*</span></label>
+        <div class="error-message" id="reason-error">Por favor elige un tema</div>
+      </div>
+
+      <div class="form-group">
+        <input type="text" id="subject" name="subject" placeholder=" " autocomplete="off" maxlength="120" aria-describedby="subject-hint" />
+        <label for="subject">Asunto <span class="opt">(opcional)</span></label>
+        <div class="field-hint" id="subject-hint">Agrega un asunto breve si lo deseas.</div>
+      </div>
+
+      <div class="form-group">
+        <textarea id="message" name="message" placeholder=" " rows="5" required minlength="10" maxlength="1000" aria-required="true" aria-describedby="message-error message-count"></textarea>
+        <label for="message">Tu Mensaje <span class="req" aria-hidden="true">*</span></label>
+        <div class="message-meta">
+          <span class="error-message" id="message-error">Por favor ingresa tu mensaje (mínimo 10 caracteres)</span>
+          <span class="char-count" id="message-count" aria-live="polite" data-min="10" data-max="1000">0 / 1000</span>
+        </div>
+      </div>
+
+      <input type="text" name="botcheck" id="botcheck" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
       <button type="submit" class="btn submit-btn">
-        <span class="loading-spinner"></span>
-        Enviar Mensaje
+        <span class="loading-spinner" aria-hidden="true"></span>
+        <span class="btn-label">Enviar Mensaje</span>
       </button>
     </form>
   </section>
@@ -678,7 +713,7 @@
     </div>
     <div class="footer-bottom">
       <p>&copy; <span id="year"></span> Alexis Chapa. Todos los derechos reservados</p>
-      <p class="footer-version">v2.0.0</p>
+      <p class="footer-version">v2.1.0 · 24 de junio de 2026</p>
     </div>
   </footer>
 
@@ -776,13 +811,13 @@
 </button>
 
 </body>
-<script src="scripts/index_ES.js"></script>
-<script src="scripts/modal_ES.js"></script>
-<script src="scripts/animacion.js"></script>
-<script src="scripts/carrusel.js"></script>
-<script src="scripts/skills.js"></script>
-<script src="scripts/timeline.js"></script>
-<script src="scripts/competencies.js"></script>
-<script src="scripts/visual-effects.js"></script>
-<script src="scripts/project-filters.js"></script>
+<script defer src="scripts/index_ES.js"></script>
+<script defer src="scripts/modal_ES.js"></script>
+<script defer src="scripts/animacion.js"></script>
+<script defer src="scripts/carrusel.js"></script>
+<script defer src="scripts/skills.js"></script>
+<script defer src="scripts/timeline.js"></script>
+<script defer src="scripts/competencies.js"></script>
+<script defer src="scripts/visual-effects.js"></script>
+<script defer src="scripts/project-filters.js"></script>
 </html>

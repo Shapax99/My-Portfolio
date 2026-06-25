@@ -39,7 +39,7 @@ const projectDetails = {
   },
   1: {
     title: 'Sistema de Cobros - App de Escritorio',
-    desc: 'Mi primera aplicación de escritorio con un sistema de cobros desarrollado en Python. Utiliza conexión local HTTP para la comunicación entre componentes y permite guardar y manejar datos locales de forma eficiente.',
+    desc: 'Mi primera aplicación de escritorio con un sistema de cobros desarrollado en Python. Utiliza conexión local HTTP para la comunicación entre componentes y permite guardar y manejar datos locales de forma eficiente. Actualmente está en producción y su desempeño ha sido eficiente, cumpliendo con su propósito principal.',
     tech: ['Python', 'HTTP Local', 'Datos Locales'],
     status: 'completed',
     statusText: 'Completado',
